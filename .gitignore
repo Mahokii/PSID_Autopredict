@@ -1,0 +1,18 @@
+# Environnement Python
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Node.js (React)
+node_modules/
+build/
+dist/
+
+# Docker
+*.log
+.dockerignore
+
+# Autres
+.env
