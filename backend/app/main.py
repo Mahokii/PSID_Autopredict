@@ -1,10 +1,6 @@
 from fastapi import FastAPI
-import asyncpg
-import os
 
 app = FastAPI()
-
-DATABASE_URL = os.getenv("DATABASE_URL")
 
 @app.get("/")
 async def root():
