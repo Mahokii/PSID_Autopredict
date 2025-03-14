@@ -7,7 +7,7 @@ const Header = () => {
     <AppBar position="static">
       <Toolbar>
         <Typography variant="h6" component={Link} to="/" style={{ textDecoration: 'none', color: 'white' }}>
-          Projet PSID Car Simulator
+          Projet PSID AutoPredict
         </Typography>
         <div style={{ flexGrow: 1 }} />
         <Button color="inherit" component={Link} to="/">Accueil</Button>
