@@ -1,0 +1,123 @@
+\documentclass[12pt]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{lmodern}
+\usepackage{fancyhdr}
+\usepackage{geometry}
+
+\geometry{margin=2.5cm}
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{\thepage}
+\lhead{\includegraphics[width=1.8cm]{logo_ecole.png}} % logo école en en-tête
+
+% PAGE DE GARDE CUSTOM
+\begin{document}
+
+\begin{titlepage}
+    \centering
+    \includegraphics[width=3.5cm]{Logo_nanterre.png}\par\vspace{1cm}
+    {\scshape\LARGE Université Paris Nanterre\par}
+    \vspace{0.5cm}
+    {\huge\bfseries Rapport de Projet\par}
+    \vspace{0.5cm}
+    {\Huge\bfseries AutoPredict\par}
+    \vspace{1.5cm}
+    {\Large \textbf{Membres du projet :} \par}
+    \vspace{0.3cm}
+    {\Large X. Frédéric \\ R. Yann \\ R. Jérémy \par}
+    \vfill
+    {\large \today\par}
+\end{titlepage}
+
+\tableofcontents
+
+\chapter{Présentation de AutoPredict}
+\section{Problématique}
+Le choix d’une voiture peut s’avérer complexe pour un acheteur, en particulier lorsque de nombreux critères entrent en jeu : budget, type de motorisation, consommation, puissance, style, marque, etc. Les plateformes existantes n’offrent pas toujours une expérience personnalisée ou intuitive pour explorer l’offre de véhicules selon ses préférences réelles. Par ailleurs, les vendeurs ou les analystes souhaitent mieux comprendre les facteurs qui influencent le prix d’un véhicule, et optimiser leur stratégie de vente.
+
+
+\section{Solution}
+AutoPredict est une plateforme web intelligente permettant d’exploiter une base de données automobile pour proposer deux fonctionnalités principales :
+
+\begin{itemize}
+    \item \textbf{Recherche assistée de modèles} : à partir d’un budget donné et de certaines préférences (ex. type de transmission, puissance, taille...), l’utilisateur reçoit une liste de véhicules correspondant à ses besoins.
+    \item \textbf{Estimation de prix} : à partir des caractéristiques sélectionnées (ex. année, style, consommation...), l’utilisateur obtient une estimation de la fourchette de prix des véhicules correspondants.
+\end{itemize}
+
+Ces fonctionnalités sont rendues possibles grâce à une architecture combinant analyse de données, machine learning, backend intelligent et une interface frontend intuitive.
+
+
+\chapter{Caractéristiques Principales}
+\section{Interface Conviviale}
+L’interface utilisateur est conçue avec ReactJS pour offrir une navigation fluide et interactive.
+L’accent est mis sur l’ergonomie, la clarté des résultats et la facilité d’utilisation même pour des utilisateurs non-experts.
+
+
+\section{Sources Fiables}
+Les données utilisées proviennent de datasets publics sur les voitures, incluant des caractéristiques techniques (puissance, consommation, taille, style), économiques (prix, popularité), et temporelles (année de sortie).
+
+\chapter{Architecture métier}
+\section{Frontend}
+Le frontend est développé en ReactJS. Il intègre des composants interactifs permettant à l’utilisateur de :
+
+\begin{itemize}
+    \item Rechercher des modèles de voitures correspondant à ses critères et à son budget
+    \item Estimer la valeur d’un véhicule en fonction de caractéristiques spécifiques
+    \item Visualiser graphiquement les résultats obtenus (filtres, comparateurs, graphiques de prix, etc.)
+\end{itemize}
+
+L’interface dialogue avec le backend via une API REST.
+
+
+\section{Backend}
+Le backend est conçu en Python à l’aide du framework Flask. Il gère :
+
+\begin{itemize}
+    \item L’accès à la base NoSQL contenant les données automobiles
+    \item L’exécution des modèles de machine learning pour la recommandation de véhicules et l’estimation des prix
+    \item L’interface avec le frontend via une API structurée
+\end{itemize}
+
+Les requêtes utilisateurs sont traitées dynamiquement pour retourner des résultats adaptés et rapides.
+
+
+\section{Base de données}
+La base de données utilisée est de type NoSQL, permettant une flexibilité dans la gestion des formats de données hétérogènes typiques du domaine automobile.
+
+\chapter{Architecture distribuée}
+\section{Application Hosting}
+Le projet est conteneurisé afin de faciliter le déploiement, la scalabilité et la portabilité. Docker est utilisé pour packager les composants.
+
+\section{Database Hosting}
+La base NoSQL est hébergée dans un environnement compatible cloud. Elle stocke les jeux de données enrichis et traités, accessibles via API.
+
+\chapter{Pratiques de Collaboration et de DevOps}
+\section{Project Management}
+Le projet est géré en équipe de trois membres : Frédéric, Yann et Jérémy. Le suivi des tâches se fait de manière collaborative autour d'outils de gestion agile.
+
+\section{Versionnement}
+L’ensemble du code source est versionné via Git, avec des dépôts organisés pour le frontend, le backend et les notebooks d'analyse/ML.
+
+\section{Intégration Continue et Déploiement Continu}
+Des pipelines CI/CD seront mis en place pour automatiser les tests, le linting, et le déploiement sur l’environnement de développement.
+
+\section{Maintenabilité du code}
+L'utilisation de conteneurs, de frameworks standards (Flask, React) et de pratiques de développement modulaire assure la maintenabilité du projet.
+
+\section{Qualité du code}
+Le code est documenté, typé et validé avec des outils de linting et des tests unitaires, notamment sur les scripts de preprocessing et les modèles ML.
+
+\chapter{Partie Data Analytique}
+\section{Source de données}
+Les jeux de données collectés concernent des véhicules avec différentes variables : prix, année, marque, puissance, consommation, popularité, style, etc.
+
+\section{Nettoyage et manipulation des Données}
+Les données brutes ont été nettoyées pour supprimer les doublons, combler les valeurs manquantes, et normaliser les unités. Des transformations ont été réalisées sur les variables temporelles et catégorielles.
+
+
+
+\end{document}
