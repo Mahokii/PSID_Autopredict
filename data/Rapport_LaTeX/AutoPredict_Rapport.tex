@@ -7,12 +7,14 @@
 \usepackage{lmodern}
 \usepackage{fancyhdr}
 \usepackage{geometry}
+\usepackage{float}
+
 
 \geometry{margin=2.5cm}
 \pagestyle{fancy}
 \fancyhf{}
 \rhead{\thepage}
-\lhead{\includegraphics[width=1.8cm]{logo_ecole.png}} % logo école en en-tête
+\lhead{\includegraphics[width=1.8cm]{Logo_nanterre.png}} % logo école en en-tête
 
 % PAGE DE GARDE CUSTOM
 \begin{document}
@@ -112,12 +114,116 @@ L'utilisation de conteneurs, de frameworks standards (Flask, React) et de pratiq
 Le code est documenté, typé et validé avec des outils de linting et des tests unitaires, notamment sur les scripts de preprocessing et les modèles ML.
 
 \chapter{Partie Data Analytique}
-\section{Source de données}
-Les jeux de données collectés concernent des véhicules avec différentes variables : prix, année, marque, puissance, consommation, popularité, style, etc.
 
-\section{Nettoyage et manipulation des Données}
-Les données brutes ont été nettoyées pour supprimer les doublons, combler les valeurs manquantes, et normaliser les unités. Des transformations ont été réalisées sur les variables temporelles et catégorielles.
+\thispagestyle{plain}
+\pagestyle{plain}
 
+
+\section{Analyse de données}
+
+\subsection{Préparation et nettoyage des données}
+
+La phase de préparation a consisté à rendre les données cohérentes, complètes et prêtes à être visualisées. Elle s’est déroulée comme suit :
+
+\begin{itemize}
+  \item \textbf{Standardisation} : Uniformisation des noms de colonnes en minuscules avec des underscores pour assurer une manipulation fluide.
+  \item \textbf{Suppression des doublons} : Élimination des entrées redondantes basées sur les identifiants véhicule/modèle.
+  \item \textbf{Traitement des valeurs manquantes} :
+    \begin{itemize}
+        \item Remplacement par des valeurs par défaut ou par la moyenne (ex. nombre de portes ou de cylindres).
+        \item Suppression des lignes avec des données critiques absentes.
+    \end{itemize}
+  \item \textbf{Filtrage des transmissions inconnues} : Les entrées comportant `UNKNOWN` pour la transmission ont été exclues de l’analyse.
+  \item \textbf{Création de nouvelles variables} :
+    \begin{itemize}
+        \item Quantiles de prix (MSRP) pour catégoriser les véhicules.
+        \item Plages de puissance moteur pour les regrouper en catégories (`faible`, `moyenne`, `élevée`, etc.).
+        \item Calcul de la consommation moyenne combinée (ville + autoroute).
+    \end{itemize}
+\end{itemize}
+
+\subsection{Présentation des graphiques et interprétation}
+
+Dans cette section, nous explorons différentes visualisations de données afin d’extraire des tendances structurelles sur notre flotte de véhicules. Chaque graphique est accompagné d’une interprétation opérationnelle, utile pour guider les recommandations clients.
+
+\paragraph{1. Répartition des types de transmission selon les quantiles de prix}\mbox{}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{transmission_vs_price.png}
+\caption{Répartition des transmissions par tranche de prix (quantiles MSRP)}
+\end{figure}
+
+
+Ce graphique à barres empilées montre que :
+\begin{itemize}
+  \item Les transmissions \textbf{automatiques} dominent très largement dans les gammes de prix \textit{intermédiaires à élevées}, représentant parfois plus de \textbf{80 \%} des véhicules.
+  \item Les transmissions \textbf{manuelles} sont surtout présentes dans les véhicules du \textit{premier quantile de prix}, et disparaissent progressivement à mesure que le prix augmente.
+  \item Les transmissions \textbf{automatisées manuelles} sont rares, présentes essentiellement dans des véhicules haut de gamme ou spécifiques.
+\end{itemize}
+
+Cette distribution illustre un lien direct entre la gamme tarifaire et le type de confort/conduite attendu.
+
+\paragraph{2. Répartition des styles de véhicules selon le type de transmission}\mbox{}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{transmission_style_sunburst.png}
+\caption{Répartition des styles de véhicule selon la transmission}
+\end{figure}
+
+Le diagramme sunburst confirme les tendances précédentes :
+\begin{itemize}
+  \item Les \textbf{SUV} et \textbf{berlines (sedan)} sont principalement associés aux transmissions automatiques, répondant à des besoins de confort et d’usage urbain/familial.
+  \item Les \textbf{coupés}, \textbf{hatchbacks} ou \textbf{pickups} sont souvent en transmission manuelle, adaptés à des usages économiques, sportifs ou professionnels.
+  \item Les transmissions rares comme \texttt{DIRECT\_DRIVE} restent anecdotiques.
+\end{itemize}
+
+\paragraph{3. Consommation moyenne selon puissance moteur et cylindres}\mbox{}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{hp_vs_cylinders.png}
+\caption{Consommation moyenne selon puissance moteur et nombre de cylindres}
+\end{figure}
+
+On observe une relation logique entre la puissance du moteur et la consommation :
+\begin{itemize}
+  \item Les véhicules à \textbf{puissance très élevée} et \textbf{8 cylindres ou plus} affichent une consommation moyenne plus élevée.
+  \item Les modèles à \textbf{puissance moyenne à faible} ont des consommations plus stables et optimisées.
+  \item Cette analyse permet de recommander les modèles selon un compromis performance/efficacité.
+\end{itemize}
+
+\paragraph{4. Prix moyen par catégorie de véhicule et puissance moteur}\mbox{}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{price_vs_hp_market.png}
+\caption{Prix moyen par catégorie de voiture et puissance moteur (avec nombre de véhicules)}
+\end{figure}
+
+Cette visualisation en barres groupées révèle :
+\begin{itemize}
+  \item Les véhicules \textbf{exotiques} dominent dans les plages de puissance élevée avec un prix moyen largement supérieur à 200 000\$.
+  \item La catégorie \textbf{haut de gamme (Luxury)} est répartie sur toutes les puissances, mais fortement concentrée sur les plages hautes.
+  \item Les \textbf{véhicules hybrides, diesel, flex fuel} et \textbf{compactes (Hatchback)} occupent les plages basses à moyennes, avec des prix accessibles.
+\end{itemize}
+
+Ce graphique complète la compréhension des segments en croisant l’offre produit avec les puissances moteur disponibles.
+
+\paragraph{5. Profil d’achat et recommandations commerciales}\mbox{}
+
+\vspace{0.5cm}
+
+À partir de l’ensemble de ces analyses, plusieurs profils-types émergent :
+\begin{itemize}
+  \item Un \textbf{client urbain familial}, à la recherche de confort et de fiabilité, sera orienté vers un \textbf{SUV automatique} de gamme intermédiaire.
+  \item Un \textbf{client professionnel ou rural} peut viser un \textbf{pickup manuel}, robuste et économique.
+  \item Un \textbf{jeune conducteur ou petit budget} sera conseillé vers un \textbf{coupé ou hatchback manuel}, situé dans les premiers quantiles de prix.
+  \item Pour les \textbf{amateurs de performance ou de véhicules hybrides}, on oriente vers des modèles à forte puissance ou technologies spécifiques, tout en tenant compte du marché (exotic, performance, luxury).
+\end{itemize}
+
+L’approche analytique appliquée à nos données permet donc d’alimenter directement notre moteur de recommandation personnalisé.
 
 
 \end{document}
