@@ -5,7 +5,7 @@ import datacsv from "../data/voiture_clean.csv";
 import { useMemo } from "react";
 
 
-const DepreciationCharts = () => {
+const Graph1 = () => {
   const [data, setData] = useState([]);
   const [selectedStyles, setSelectedStyles] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState([]);
@@ -486,4 +486,4 @@ const getBrandStats = () => {
   );
 };
 
-export default DepreciationCharts;
+export default Graph1;

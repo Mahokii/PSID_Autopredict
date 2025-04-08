@@ -47,32 +47,15 @@ fs.createReadStream(INPUT_FILE)
     });
 
     // Supprimer les transmissions inconnues
-    const filtered = filled.filter(row => row['Transmission Type'] !== 'UNKNOWN');
-
-    // Convertir les colonnes numériques
+    const filtered = filled.filter(row => row['Transmission Type'] !== 'UNKNOWN');    // Convertir les colonnes numériques
     filtered.forEach(row => {
       numericCols.forEach(col => {
         row[col] = parseFloat(row[col]);
       });
     });
 
-    // Supprimer les outliers par IQR
-    const bounds = {};
-    numericCols.forEach(col => {
-      const values = filtered.map(r => r[col]).filter(v => !isNaN(v));
-      values.sort((a, b) => a - b);
-      const q1 = values[Math.floor(values.length * 0.25)];
-      const q3 = values[Math.floor(values.length * 0.75)];
-      const iqr = q3 - q1;
-      bounds[col] = {
-        min: q1 - 1.5 * iqr,
-        max: q3 + 1.5 * iqr
-      };
-    });
-
-    const cleaned = filtered.filter(row =>
-      numericCols.every(col => row[col] >= bounds[col].min && row[col] <= bounds[col].max)
-    );
+    // On garde toutes les données, sans supprimer les outliers
+    const cleaned = filtered;
 
     // Exporter en CSV
     const csvOutput = Papa.unparse(cleaned);

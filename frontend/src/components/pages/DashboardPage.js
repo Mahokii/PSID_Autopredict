@@ -1,13 +1,9 @@
 import React from 'react';
 import { Container, Typography, Paper, Box } from '@mui/material';
-import DataChart from '../charts/DataChart';
-import DepreciationCharts from '../charts/graph1';
-
-const data = [
-  { x: 1, y: 2, z: 3 },
-  { x: 4, y: 5, z: 6 },
-  { x: 7, y: 8, z: 9 },
-];
+import Graph1 from '../charts/graph1';
+import Graph2 from '../charts/graph2';
+import Graph3 from '../charts/graph3';
+import Graph4 from '../charts/graph4'; 
 
 const DashboardPage = () => {
   return (
@@ -25,7 +21,28 @@ const DashboardPage = () => {
             <Typography variant="h4" gutterBottom>
               Commment l'ancienneté d'une voiture affecte-t-elle son prix ?
             </Typography>
-            <DepreciationCharts />
+            <Graph1 />
+          </Box>
+
+          <Box mt={6}>
+            <Typography variant="h4" gutterBottom>
+              Quel type de transmission est le plus économiques ?
+            </Typography>
+            <Graph2 />
+          </Box>
+
+          <Box mt={6}>
+            <Typography variant="h4" gutterBottom>
+              Est il possible possible d'allier performance, économie de carburant et prix d'achat faible ?
+            </Typography>
+            <Graph3 /> 
+          </Box>
+          
+          <Box mt={6}>
+            <Typography variant="h4" gutterBottom>
+              La diversité des gammes constructeurs ont il un impact sur leurs popularités ?
+            </Typography>
+            <Graph4 />
           </Box>
 
         </Paper>
