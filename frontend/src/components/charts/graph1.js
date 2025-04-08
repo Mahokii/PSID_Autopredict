@@ -3,6 +3,8 @@ import Plot from "react-plotly.js";
 import Papa from "papaparse";
 import datacsv from "../data/voiture_clean.csv";
 import { useMemo } from "react";
+import Button from "@mui/material/Button";
+
 
 
 const Graph1 = () => {
@@ -321,22 +323,24 @@ const getBrandStats = () => {
       <div className="bg-white p-4 rounded-lg shadow-md">
         <h2 className="text-xl font-semibold mb-4">Dépréciation par style de véhicule</h2>
         <div className="mb-4 flex flex-wrap gap-2">
-          <button 
-            className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
-            onClick={() => setSelectedStyles([])}
-          >
-            Tous les styles
-          </button>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => setSelectedStyles([])}
+        >
+          Tous les styles
+        </Button>
           {allStyles.slice(0, 10).map(style => (
-            <button
-              key={style}
-              className={`px-3 py-1 border rounded ${
-                selectedStyles.includes(style) ? "bg-blue-100 border-blue-500" : "bg-gray-50"
-              }`}
-              onClick={() => handleStyleChange(style)}
-            >
-              {style}
-            </button>
+            <Button
+            key={style}
+            variant={selectedStyles.includes(style) ? "contained" : "outlined"}
+            color="primary"
+            onClick={() => handleStyleChange(style)}
+            sx={{ textTransform: 'none' }}
+          >
+            {style}
+          </Button>
+          
           ))}
         </div>
         <Plot
@@ -409,22 +413,22 @@ const getBrandStats = () => {
       <div className="bg-white p-4 rounded-lg shadow-md">
         <h2 className="text-xl font-semibold mb-4">Dépréciation par catégorie de marché</h2>
         <div className="mb-4 flex flex-wrap gap-2">
-          <button 
-            className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
+          <Button 
+            variant="contained" 
+            color="primary" 
             onClick={() => setSelectedCategories([])}
           >
             Toutes les catégories
-          </button>
+          </Button>
           {allCategories.slice(0, 10).map(category => (
-            <button
+            <Button
               key={category}
-              className={`px-3 py-1 border rounded ${
-                selectedCategories.includes(category) ? "bg-blue-100 border-blue-500" : "bg-gray-50"
-              }`}
+              variant={selectedCategories.includes(category) ? "contained" : "outlined"}
+              color="primary"
               onClick={() => handleCategoryChange(category)}
             >
               {category}
-            </button>
+            </Button>
           ))}
         </div>
         <Plot

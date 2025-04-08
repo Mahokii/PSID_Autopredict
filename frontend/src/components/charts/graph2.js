@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Plot from "react-plotly.js";
 import Papa from "papaparse";
 import datacsv from "../data/voiture_clean.csv";
+import Button from "@mui/material/Button";
 
 const Graph2 = () => {
   const [data, setData] = useState([]);
@@ -145,21 +146,24 @@ const Graph2 = () => {
   const sunburstData = getSunburstData();
 
   return (
-    <div className="space-y-6">
-      {/* Tabs de navigation */}
-      <div className="flex border-b">
-        <button
-          className={`py-2 px-4 ${activeTab === "quantile" ? "bg-blue-500 text-white" : "bg-gray-200"}`}
+    <div className="space-y-6">      {/* Tabs de navigation */}
+      <div className="flex border-b gap-2 mb-4">
+        <Button
+          variant={activeTab === "quantile" ? "contained" : "outlined"}
+          color="primary"
           onClick={() => setActiveTab("quantile")}
+          sx={{ textTransform: 'none' }}
         >
           Répartition par quantile de prix
-        </button>
-        <button
-          className={`py-2 px-4 ${activeTab === "sunburst" ? "bg-blue-500 text-white" : "bg-gray-200"}`}
+        </Button>
+        <Button
+          variant={activeTab === "sunburst" ? "contained" : "outlined"}
+          color="primary"
           onClick={() => setActiveTab("sunburst")}
+          sx={{ textTransform: 'none' }}
         >
           Répartition par style de véhicule
-        </button>
+        </Button>
       </div>
 
       {/* Graphiques */}
