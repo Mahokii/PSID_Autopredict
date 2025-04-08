@@ -1,6 +1,6 @@
+import Papa from "papaparse";
 import React, { useEffect, useState } from "react";
 import Plot from "react-plotly.js";
-import Papa from "papaparse";
 import datacsv from "../data/voiture_clean.csv";
 
 const Graph3 = () => {
@@ -178,10 +178,7 @@ const Graph3 = () => {
             xaxis: {
               title: { 
                 text: "Type de puissance moteur",
-                font: {
-                  size: 16,
-                  color: '#333'
-                }
+                font: { size: 16, color: '#333' }
               },
               categoryorder: "array",
               categoryarray: ["Très faible", "Faible", "Moyenne", "Élevée", "Très élevée"]
@@ -189,12 +186,8 @@ const Graph3 = () => {
             yaxis: {
               title: { 
                 text: "Consommation moyenne (MPG)",
-                font: {
-                  size: 16,
-                  color: '#333'
-                }
-                
-              },
+                font: { size: 16, color: '#333' }
+              }
             },
             legend: { title: { text: "Nb Cylindres" } },
             margin: { t: 50, b: 100 }
@@ -202,14 +195,49 @@ const Graph3 = () => {
           config={{ responsive: true }}
           style={{ width: "100%" }}
         />
-                <div className="mt-4 text-gray-700 leading-relaxed space-y-4">
+        <div className="mt-6 text-gray-700 leading-relaxed space-y-4">
+          <h3 className="text-lg font-semibold">Analyse croisée de la consommation moyenne selon la puissance moteur et le nombre de cylindres</h3>
           <p>
-            Ce graphique s'intéresse à la <strong>...</strong> des véhicules.
+            Ce graphique interactif illustre la consommation moyenne de carburant (exprimée en miles par gallon – MPG) 
+            en fonction de deux caractéristiques mécaniques clés : la puissance du moteur et le nombre de cylindres. 
+            L’objectif est de mettre en évidence les liens entre performance moteur et rendement énergétique.
           </p>
 
-           
+          <h4 className="text-md font-semibold">Distribution générale : plus de puissance, moins de sobriété</h4>
+          <ul className="list-disc pl-5 space-y-2">
+            <li>On observe une <strong>diminution progressive de la consommation moyenne (MPG)</strong> à mesure que la puissance augmente.</li>
+            <li>Les véhicules plus puissants sont souvent <strong>plus lourds, rapides, orientés performance</strong>, et donc plus gourmands.</li>
+            <li>Une <strong>sollicitation accrue du moteur</strong> entraîne des pertes énergétiques.</li>
+          </ul>
+
+          <h4 className="text-md font-semibold">L'influence du nombre de cylindres</h4>
+          <ul className="list-disc pl-5 space-y-2">
+            <li>Les <strong>3 et 4 cylindres</strong> sont généralement les plus sobres.</li>
+            <li>Les moteurs à <strong>6 cylindres ou plus</strong> consomment davantage, avec une montée constante.</li>
+            <li>Les <strong>10, 12 ou 16 cylindres</strong> affichent une consommation extrême, typique des véhicules de luxe ou sportifs.</li>
+          </ul>
+
+          <h4 className="text-md font-semibold">Hypothèses explicatives</h4>
+          <ul className="list-disc pl-5 space-y-2">
+            <li><strong>Technologie</strong> : turbo, hybridation, désactivation des cylindres permettent à certains moteurs d’être performants et sobres.</li>
+            <li><strong>Catégories de véhicules</strong> : SUV, sportives ou utilitaires sont naturellement plus énergivores.</li>
+            <li><strong>Pression réglementaire</strong> : les moteurs downsizés deviennent fréquents pour combiner puissance et économie.</li>
+          </ul>
+
+          <h4 className="text-md font-semibold">Conclusion</h4>
+          <p>
+            La consommation moyenne est <strong>étroitement liée à la puissance et au nombre de cylindres</strong>. 
+            Si la règle générale veut qu’un moteur plus puissant consomme plus, les avancées technologiques 
+            et les choix de catégorie nuancent cette relation. 
+            Cette analyse aide à <strong>mieux positionner les modèles selon les préférences client</strong> entre performance et sobriété.
+          </p>
+          <p className="mt-2">
+            Il serait pertinent de compléter cette étude par une <strong>analyse comparative des prix</strong> 
+            selon la puissance moteur, pour identifier les modèles les plus rentables.
+          </p>
         </div>
       </div>
+
 
       <div className="bg-white p-4 rounded-lg shadow-md">
         <h2 className="text-xl font-semibold mb-4">Prix moyen par catégorie de véhicule et puissance moteur</h2>
@@ -250,13 +278,58 @@ const Graph3 = () => {
           config={{ responsive: true }}
           style={{ width: "100%" }}
         />
-        <div className="mt-4 text-gray-700 leading-relaxed space-y-4">
+        <div className="mt-6 text-gray-700 leading-relaxed space-y-4">
+          <h3 className="text-lg font-semibold">Analyse croisée : prix moyen des véhicules par catégorie de voitures et puissance moteur</h3>
+
           <p>
-            Ce graphique s'intéresse à la <strong>...</strong> des véhicules.
+            Le graphique représente le <strong>prix moyen (MSRP)</strong> des véhicules selon leur <strong>catégorie de voitures</strong> et leur <strong>type de puissance moteur</strong>,
+            tout en indiquant le <strong>nombre de véhicules</strong> disponibles dans chaque groupe. Cette visualisation vise à évaluer dans quelle mesure il est possible
+            pour un client d’opter pour un véhicule <strong>puissant</strong> tout en maîtrisant son <strong>budget</strong>, malgré une consommation potentiellement plus élevée.
           </p>
 
-           
+          <h4 className="text-md font-semibold">Plus de puissance veut dire plus cher ?</h4>
+          <ul className="list-disc pl-5 space-y-2">
+            <li>La catégorie <strong>"Luxury"</strong> s’étend sur toutes les tranches de puissance, avec des prix relativement <strong>stables</strong> autour de 60 000 $ à 90 000 $.</li>
+            <li>Les catégories <strong>"High-Performance"</strong> et <strong>"Exotic"</strong> affichent des <strong>prix très élevés</strong> dès les tranches "Élevée" et "Très élevée", culminant jusqu’à 250 000 $ pour "Exotic".</li>
+            <li>Certaines catégories comme <strong>"Crossover"</strong> ou <strong>"Performance"</strong> présentent une <strong>croissance plus modérée</strong> du prix malgré l’augmentation de la puissance.</li>
+          </ul>
+
+          <h4 className="text-md font-semibold">Des compromis accessibles</h4>
+          <ul className="list-disc pl-5 space-y-2">
+            <li>Les véhicules <strong>"Performance"</strong>, présents dans les tranches "Élevée" et "Très élevée", affichent un <strong>prix moyen de 40 000 à 60 000 $</strong>, bien en dessous des "Luxury" ou "Exotic".</li>
+            <li>La catégorie <strong>"Crossover"</strong> reste présente dans toutes les tranches de puissance avec un <strong>prix relativement stable (~40 000 $)</strong>.</li>
+          </ul>
+
+          <h4 className="text-md font-semibold">Hypothèse de rentabilité pour faire une concession sur la consommation</h4>
+          <p>
+            Il peut être <strong>pertinent</strong> de faire une <strong>concession sur la consommation</strong> si le <strong>prix d’acquisition reste abordable</strong> :
+          </p>
+          <ul className="list-disc pl-5 space-y-2">
+            <li>Les véhicules <strong>puissants mais abordables</strong> comme certains "Performance" ou "Flex Fuel" peuvent être <strong>rentables à long terme</strong>, surtout en usage modéré.</li>
+            <li>À l’inverse, les véhicules très puissants des catégories <strong>"Exotic"</strong> ou <strong>"High-Performance"</strong> exigent un <strong>investissement initial très élevé</strong>, réduisant leur rentabilité.</li>
+          </ul>
+
+          <h4 className="text-md font-semibold">Équilibre entre performance et budget</h4>
+          <p>
+            Ce graphique met en évidence un <strong>équilibre atteignable</strong> entre puissance moteur et prix d’achat dans certaines catégories :
+          </p>
+          <ul className="list-disc pl-5 space-y-2">
+            <li><strong>"Performance"</strong>, <strong>"Crossover"</strong> ou certains véhicules <strong>"Luxury"</strong> intermédiaires offrent des compromis intéressants.</li>
+            <li>Ils permettent d’accéder à des véhicules <strong>puissants mais non excessifs en prix</strong>, idéaux pour un public à la recherche d’un bon rapport performance/budget.</li>
+          </ul>
+
+          <h4 className="text-md font-semibold">Conclusion</h4>
+          <blockquote className="border-l-4 border-blue-500 pl-4 italic text-gray-600">
+            Il est possible pour un client d’acheter une <strong>voiture puissante</strong> en acceptant une <strong>consommation plus élevée</strong>, à condition de bien choisir la <strong>catégorie de véhicule</strong>.
+            L’analyse montre que certaines <strong>catégories de marché offrent une puissance élevée à un prix modéré</strong>, ouvrant la voie à une rentabilité acceptable malgré la consommation.
+          </blockquote>
+
+          <p className="mt-2">
+            Ainsi, l’acheteur rationnel dispose d’une <strong>marge de manœuvre</strong> pour arbitrer entre puissance, consommation et coût,
+            selon ses priorités (performance, budget, confort ou image).
+          </p>
         </div>
+
       </div>
     </div>
   );

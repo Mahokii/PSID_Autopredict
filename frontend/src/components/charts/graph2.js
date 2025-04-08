@@ -1,8 +1,8 @@
+import Button from "@mui/material/Button";
+import Papa from "papaparse";
 import React, { useEffect, useState } from "react";
 import Plot from "react-plotly.js";
-import Papa from "papaparse";
 import datacsv from "../data/voiture_clean.csv";
-import Button from "@mui/material/Button";
 
 const Graph2 = () => {
   const [data, setData] = useState([]);
@@ -92,7 +92,7 @@ const Graph2 = () => {
     const groupedData = {};
     const allStyles = Array.from(new Set(data.map((row) => row["Vehicle Style"])));
   
-    // Initialize groupedData with all transmission types and styles
+    // Initialiser les transmissions avec tous les styles
     const allTransmissions = Array.from(new Set(data.map((row) => row["Transmission Type"])));
     allTransmissions.forEach((transmission) => {
       groupedData[transmission] = {};
@@ -101,7 +101,7 @@ const Graph2 = () => {
       });
     });
   
-    // Populate groupedData with actual counts
+    // Compter les styles réels
     data.forEach((row) => {
       const transmission = row["Transmission Type"];
       const style = row["Vehicle Style"];
@@ -112,8 +112,8 @@ const Graph2 = () => {
     const parents = [];
     const values = [];
     const colors = [];
+    const ids = [];
   
-    // Define colors for each transmission type
     const transmissionColors = {
       AUTOMATIC: "#1f77b4",
       MANUAL: "#ff7f0e",
@@ -128,19 +128,28 @@ const Graph2 = () => {
       labels.push(transmission);
       parents.push("");
       values.push(transmissionTotal);
+      ids.push(transmission);
       colors.push(transmissionColors[transmission] || "#8c564b");
   
-      Object.entries(styles).forEach(([style, count]) => {
-        labels.push(style);
-        parents.push(transmission);
-        values.push(count);
-        colors.push(transmissionColors[transmission] ? transmissionColors[transmission] + "88" : "#8c564b88");
-      });
+      Object.entries(styles)
+        .sort(([, a], [, b]) => b - a) // tri décroissant des styles par nombre
+        .forEach(([style, count]) => {
+          labels.push(style);
+          parents.push(transmission);
+          values.push(count);
+          ids.push(`${transmission}/${style}`);
+          colors.push(
+            transmissionColors[transmission]
+              ? transmissionColors[transmission] + "aa"
+              : "#8c564baa"
+          );
+        });
     });
   
-    return { labels, parents, values, colors };
+    return { labels, parents, values, colors, ids };
   };
-
+  
+    
   // Obtenir les données formatées
   const barChartData = getBarChartData();
   const sunburstData = getSunburstData();
@@ -186,9 +195,10 @@ const Graph2 = () => {
               margin: { t: 50, b: 100 },
               legend: {
                 title: { text: "Type de transmission" },
-                orientation: "h",
-                y: -0.2
-              },
+                orientation: "v", // vertical
+                x: 1.05,           // en dehors du graphique, à droite
+                y: 1,              // aligné en haut
+              },              
               height: 500
             }}
             config={{ responsive: true }}
@@ -210,50 +220,102 @@ const Graph2 = () => {
         </div>
       )}
 
-      {activeTab === "sunburst" && (
-        <div className="bg-white p-4 rounded-lg shadow-md">
-          <h2 className="text-xl font-semibold mb-4">
-            Répartition des styles de véhicule selon le type de transmission
-          </h2>
-          <Plot
-            data={[
-              {
-                type: "sunburst",
-                labels: sunburstData.labels,
-                parents: sunburstData.parents,
-                values: sunburstData.values,
-                branchvalues: "total",
-                textinfo: "label+percent entry",
-                insidetextorientation: "radial",
-                marker: { colors: sunburstData.colors }
-              },
-            ]}
-            layout={{
-              margin: { t: 0, l: 0, r: 0, b: 0 },
-              width: 700,
-              height: 700,
-            }}
-            config={{ responsive: true }}
-          />
-          <div className="mt-6 text-gray-700">
-            <p className="mb-3">
-              <strong>Analyse:</strong> Ce diagramme sunburst permet de visualiser la répartition des styles de véhicule 
-              en fonction du type de transmission:
-            </p>
-            <ul className="list-disc pl-5 space-y-2">
-              <li>Les <strong>transmissions automatiques</strong> concernent principalement des véhicules de type <strong>SUV</strong> et <strong>berlines (Sedan)</strong>, 
-                c'est-à-dire des modèles généralement plus spacieux, orientés vers le confort et souvent utilisés dans des contextes urbains ou familiaux.</li>
-              <li>Les <strong>transmissions manuelles</strong> sont davantage associées à des <strong>coupés</strong>, <strong>hatchbacks</strong>, ou encore des <strong>pickups</strong>. 
-                Ces styles sont souvent liés à des usages plus économiques, sportifs ou professionnels.</li>
-              <li>Les transmissions automatisées et directes (DIRECT_DRIVE) sont très minoritaires, ce qui les rend peu représentatives pour l'analyse.</li>
-            </ul>
-            <p className="mt-4">
-              Cette visualisation révèle une <strong>relation structurelle entre le type de transmission et le style du véhicule</strong>, 
-              offrant des indications précieuses pour les recommandations d'achat selon les préférences des utilisateurs.
-            </p>
-          </div>
-        </div>
-      )}
+{activeTab === "sunburst" && (
+  <div className="bg-white p-4 rounded-lg shadow-md">
+    <h2 className="text-xl font-semibold mb-4">
+      Répartition des styles de véhicule selon le type de transmission
+    </h2>
+    <Plot
+  data={[
+    {
+      type: "sunburst",
+      labels: sunburstData.labels,
+      parents: sunburstData.parents,
+      values: sunburstData.values,
+      ids: sunburstData.ids,
+      branchvalues: "total",
+      textinfo: "label+percent entry+value",
+      hoverinfo: "label+value+percent parent+percent entry",
+      insidetextorientation: "radial",
+      marker: { colors: sunburstData.colors },
+      maxdepth: 2,
+      leaf: { opacity: 1 },
+    },
+  ]}
+  layout={{
+    margin: { t: 40, l: 40, r: 40, b: 40 },
+    width: 900,
+    height: 800,
+    sunburstcolorway: ["#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd"],
+    extendsunburstcolorway: true
+  }}
+  config={{ responsive: true }}
+/>
+
+    <div className="mt-6 text-gray-700">
+      <h4 className="text-lg font-semibold mb-2">
+        Répartition des styles de véhicule selon le type de transmission
+      </h4>
+      <p className="mb-3">
+        Le second graphique, un diagramme sunburst, permet de visualiser la répartition des <strong>styles de véhicule</strong> en fonction du <strong>type de transmission</strong> :
+      </p>
+      <ul className="list-disc pl-5 space-y-2">
+        <li>Les <strong>transmissions automatiques</strong> concernent principalement des véhicules de type <strong>SUV</strong> et <strong>berlines (Sedan)</strong>, c’est-à-dire des modèles généralement plus spacieux, orientés vers le confort et souvent utilisés dans des contextes urbains ou familiaux.</li>
+        <li>Les <strong>transmissions manuelles</strong> sont davantage associées à des <strong>coupés</strong>, <strong>hatchbacks</strong>, ou encore des <strong>pickups</strong>. Ces styles sont souvent liés à des usages plus économiques, sportifs ou professionnels.</li>
+        <li>Les transmissions <strong>automatisées et directes</strong> (<code>DIRECT_DRIVE</code>) sont très minoritaires, ce qui les rend peu représentatives pour l’analyse.</li>
+      </ul>
+
+      <h4 className="text-lg font-semibold mt-6 mb-2">
+        Corrélation entre les deux graphiques
+      </h4>
+      <p className="mb-3">
+        Les deux visualisations convergent vers une <strong>relation structurelle entre le prix, le type de transmission et le style du véhicule</strong> :
+      </p>
+      <table className="table-auto border-collapse border border-gray-400 text-sm mb-4">
+        <thead>
+          <tr className="bg-gray-100">
+            <th className="border border-gray-400 px-4 py-2">Type de transmission</th>
+            <th className="border border-gray-400 px-4 py-2">Styles dominants</th>
+            <th className="border border-gray-400 px-4 py-2">Gamme de prix associée</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td className="border border-gray-400 px-4 py-2">Automatique</td>
+            <td className="border border-gray-400 px-4 py-2">SUV, Sedan</td>
+            <td className="border border-gray-400 px-4 py-2">Moyenne à élevée</td>
+          </tr>
+          <tr>
+            <td className="border border-gray-400 px-4 py-2">Manuelle</td>
+            <td className="border border-gray-400 px-4 py-2">Coupé, Hatchback, Pickup</td>
+            <td className="border border-gray-400 px-4 py-2">Basse à moyenne</td>
+          </tr>
+          <tr>
+            <td className="border border-gray-400 px-4 py-2">Semi-automatique</td>
+            <td className="border border-gray-400 px-4 py-2">Divers véhicules haut de gamme</td>
+            <td className="border border-gray-400 px-4 py-2">Élevée</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h4 className="text-lg font-semibold mb-2">En tant que vendeur :</h4>
+      <p className="mb-3">
+        Dans une optique de vente ou de recommandation :
+      </p>
+      <ul className="list-disc pl-5 space-y-2">
+        <li>Pour un <strong>client recherchant le confort ou un usage familial</strong>, les véhicules <strong>automatiques de type SUV ou berline</strong> seront les plus adaptés.</li>
+        <li>Pour un <strong>client au budget restreint</strong>, un <strong>véhicule manuel</strong> de type <strong>compact</strong> ou <strong>coupé</strong> sera plus accessible.</li>
+        <li>Pour un <strong>profil professionnel ou rural</strong>, le <strong>pickup manuel</strong> reste un bon compromis entre robustesse et maîtrise du budget.</li>
+      </ul>
+
+      <p className="mt-4">
+        On peut <strong>établir un profil type des acheteurs selon leur budget, leur usage et leurs attentes en matière de confort ou performance.</strong>
+      </p>
+    </div>
+
+  </div>
+)}
+
     </div>
   );
 };
