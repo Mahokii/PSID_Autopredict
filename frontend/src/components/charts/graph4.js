@@ -7,7 +7,7 @@ const Graph4 = () => {
   const [trace1, setTrace1] = useState([]);
   const [trace2, setTrace2] = useState([]);
   const [trace3, setTrace3] = useState([]);
-  const [top5, setTop5] = useState([]);
+  const [setTop5] = useState([]);
 
   useEffect(() => {
     fetch(datacsv)

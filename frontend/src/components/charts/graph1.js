@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import Plot from "react-plotly.js";
 import Papa from "papaparse";
 import datacsv from "../data/voiture_clean.csv";
-import { useMemo } from "react";
 import Button from "@mui/material/Button";
 
 
@@ -102,56 +101,10 @@ const Graph1 = () => {
     });
   };
 
-  // Obtenir les marques représentatives par segment
-  const getTopBrandsByCategory = () => {
-    const segmentMap = {};
-    
-    // Regrouper par segment et marque
-    data.forEach(row => {
-      const categories = (row["Market Category"] || "Other").split(",");
-      const make = row["Make"];
-      const msrp = +row.MSRP;
-      
-      categories.forEach(cat => {
-        const category = cat.trim();
-        if (!segmentMap[category]) segmentMap[category] = {};
-        if (!segmentMap[category][make]) segmentMap[category][make] = [];
-        segmentMap[category][make].push(msrp);
-      });
-    });
-
-    // Pour chaque segment, calculer la marque ayant le plus de véhicules et le prix moyen
-    const result = [];
-    Object.entries(segmentMap).forEach(([segment, brandMap]) => {
-      // Calculer le prix moyen pour chaque marque dans ce segment
-      const brandStats = Object.entries(brandMap).map(([brand, prices]) => ({
-        brand,
-        count: prices.length,
-        avgPrice: prices.reduce((a, b) => a + b, 0) / prices.length
-      }));
-
-      // Trier par nombre de véhicules (popularité)
-      const sortedBrands = brandStats.sort((a, b) => b.count - a.count);
-      
-      // Prendre les 3 marques les plus représentées
-      sortedBrands.slice(0, 3).forEach(item => {
-        result.push({
-          segment,
-          brand: item.brand,
-          count: item.count,
-          avgPrice: item.avgPrice
-        });
-      });
-    });
-
-    return result;
-  };
-
   // Préparation des données
   const yearData = getAvgMsrpByYear();
   const styleTraces = getDepreciationByStyle();
   const categoryTraces = getDepreciationByCategory();
-  const topBrands = getTopBrandsByCategory();
 
   // Obtenir la liste de tous les styles et catégories pour les filtres
   const allStyles = [...new Set(data.map(row => row["Vehicle Style"]))].filter(Boolean);
@@ -177,71 +130,6 @@ const Graph1 = () => {
     }
   };
 
-  // Ajouter cet état et cette fonction de filtrage
-    const [selectedSegment, setSelectedSegment] = useState("all");
-
-    // Définir les marques filtrées selon le segment sélectionné
-    const filteredBrands = useMemo(() => {
-    if (selectedSegment === "all") {
-        return topBrands;
-    } else {
-        return topBrands.filter(brand => brand.segment === selectedSegment);
-    }
-    }, [topBrands, selectedSegment]);
-
-
-  // Nouvelle fonction pour obtenir des statistiques par marque avec leur style de véhicule majoritaire
-const getBrandStats = () => {
-  const brandData = {};
-  
-  // Regrouper les véhicules par marque
-  data.forEach(row => {
-    const make = row["Make"];
-    const msrp = +row.MSRP;
-    const style = row["Vehicle Style"] || "Unknown"; // Utiliser Vehicle Style au lieu de Market Category
-    
-    if (!brandData[make]) {
-      brandData[make] = {
-        totalVehicles: 0,
-        totalPrice: 0,
-        styles: {}
-      };
-    }
-    
-    brandData[make].totalVehicles += 1;
-    brandData[make].totalPrice += msrp;
-    
-    // Compter les occurrences de chaque style pour cette marque
-    if (!brandData[make].styles[style]) {
-      brandData[make].styles[style] = {
-        count: 0,
-        totalPrice: 0
-      };
-    }
-    brandData[make].styles[style].count += 1;
-    brandData[make].styles[style].totalPrice += msrp;
-  });
-  
-  // Calculer les statistiques pour chaque marque
-  return Object.entries(brandData)
-    .filter(([_, data]) => data.totalVehicles >= 5) // Filtrer pour avoir au moins 5 véhicules
-    .map(([make, data]) => {
-      // Trouver le style majoritaire
-      const mainStyle = Object.entries(data.styles)
-        .sort((a, b) => b[1].count - a[1].count)[0];
-      
-      return {
-        brand: make,
-        count: data.totalVehicles,
-        avgPrice: data.totalPrice / data.totalVehicles,
-        mainStyle: mainStyle[0],
-        mainStyleCount: mainStyle[1].count,
-        mainStyleAvgPrice: mainStyle[1].totalPrice / mainStyle[1].count
-      };
-    })
-    .sort((a, b) => b.count - a.count) // Trier par popularité
-    .slice(0, 20); // Limiter aux 20 marques les plus populaires
-};
 
   return (
     <div className="space-y-12 p-4">      
