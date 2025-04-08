@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
-import { Container, Typography, Paper, Box, TextField, Button, FormControl, FormControlLabel, Radio, RadioGroup, Collapse } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import { Container, Typography, Paper, Box, TextField, Button, FormControl, FormControlLabel, Radio, RadioGroup, Collapse, MenuItem, Select } from '@mui/material';
 import { ExpandMore as ExpandMoreIcon } from '@mui/icons-material';
+import Papa from 'papaparse';
+import brandcsv from '../ressources/companies.csv';
 
 const ModelMLPage = () => {
   const [formData, setFormData] = useState({
@@ -23,6 +25,21 @@ const ModelMLPage = () => {
   });
 
   const [openOptional, setOpenOptional] = useState(false);
+  const [brands, setBrands] = useState([]);
+
+  useEffect(() => {
+    // Chargez le fichier CSV
+    fetch(brandcsv)
+      .then(response => response.text())
+      .then(data => {
+        Papa.parse(data, {
+          header: true,
+          complete: results => {
+            setBrands(results.data);
+          }
+        });
+      });
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -40,6 +57,7 @@ const ModelMLPage = () => {
 
   const requiredFieldsPrice = ['make', 'model', 'year', 'engineFuelType'];
   const requiredFieldsCharacteristics = ['msrp'];
+
 
   return (
     <Container maxWidth="lg">
@@ -79,8 +97,30 @@ const ModelMLPage = () => {
               </Box>
             )}
 
-            {requiredFieldsPrice.map((field) => (
-              <Box key={field} mb={2}>
+            <Box mb={2}>
+              <Select
+                fullWidth
+                required={formData.mode === 'price'}
+                value={formData.make}
+                onChange={(e) => handleChange({ target: { name: 'make', value: e.target.value } })}
+                displayEmpty
+              >
+                <MenuItem value="" disabled>
+                  Sélectionnez une marque
+                </MenuItem>
+                {brands.map((brand, index) => (
+                  <MenuItem key={index} value={brand.name}>
+                    <Box display="flex" alignItems="center">
+                      <img src={brand.logo_link} alt={brand.name} style={{ width: '30px', marginRight: '10px' }} />
+                      {brand.name}
+                    </Box>
+                  </MenuItem>
+                ))}
+              </Select>
+            </Box>
+
+            {requiredFieldsPrice.filter(field => field !== 'make').map((field, index) => (
+              <Box key={index} mb={2}>
                 <TextField
                   fullWidth
                   required={formData.mode === 'price'}
@@ -94,20 +134,20 @@ const ModelMLPage = () => {
             ))}
 
             <Box mb={2}>
-            <Button
-              variant="outlined"
-              onClick={() => setOpenOptional(!openOptional)}
-              endIcon={<ExpandMoreIcon />}
-            >
-              {openOptional ? 'Masquer les caractéristiques optionnelles' : 'Afficher les caractéristiques optionnelles'}
-            </Button>
+              <Button
+                variant="outlined"
+                onClick={() => setOpenOptional(!openOptional)}
+                endIcon={<ExpandMoreIcon />}
+              >
+                {openOptional ? 'Masquer les caractéristiques optionnelles' : 'Afficher les caractéristiques optionnelles'}
+              </Button>
             </Box>
 
             <Collapse in={openOptional}>
               {Object.keys(formData)
-                .filter(key => !requiredFieldsPrice.includes(key) && key !== 'mode' && key !== 'msrp')
-                .map((field) => (
-                  <Box key={field} mb={2}>
+                .filter(key => !requiredFieldsPrice.includes(key) && key !== 'mode' && key !== 'msrp' && key !== 'make')
+                .map((field, index) => (
+                  <Box key={index} mb={2}>
                     <TextField
                       fullWidth
                       label={field.charAt(0).toUpperCase() + field.slice(1).replace('_', ' ')}
