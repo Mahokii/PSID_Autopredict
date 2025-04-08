@@ -300,7 +300,7 @@ const getBrandStats = () => {
     Les véhicules les plus anciens (1990–1999) se vendent en moyenne <strong>sous la barre des 10 000 $</strong>, illustrant une dépréciation naturelle avec le temps.
   </p>
   <p>
-    Un saut notable apparaît autour de l’an 2000, où le prix moyen grimpe rapidement, probablement dû à l’intégration de modèles plus récents et mieux équipés.
+    Une chute notable apparaît autour de l’an 2000, probablement due à l'instauration d'une loi sur les émissions polluantes tel que la ZFE, qui restrict les véhicules anciens dans certaines zones urbaines. Ainsi, les véhicules de cette époque sont moins recherchés.
   </p>
   <p>
     Entre 2005 et 2015, le prix moyen oscille entre <strong>45 000 $</strong> et <strong>60 000 $</strong>, ce qui reflète une part croissante de véhicules premium ou haut de gamme dans le dataset.

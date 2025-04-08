@@ -81,10 +81,14 @@ Accédez à : [http://localhost:3000](http://localhost:3000)
 ---
 
 ## 🛠 Technologies utilisées
-- **Backend** : FastAPI, Uvicorn, SQLAlchemy, Asyncpg
 - **Base de données** : PostgreSQL (avec JSONB pour NoSQL)
-- **Frontend** : ReactJS, Bootstrap, Axios, React Router
+- **Backend** : FastAPI, Uvicorn, SQLAlchemy, Asyncpg
+- **Frontend** : ReactJS, MUI, Bootstrap, Axios, React Router
 - **Déploiement** : Docker, Docker Compose
+- **Versionning** : Git
+- **CI/CD** : GitHub Action
+- **Hébergement en ligne** : GitHub
+
 
 ---
 
