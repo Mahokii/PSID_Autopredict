@@ -56,7 +56,9 @@ const Graph4 = () => {
         setTrace1(traceData1);
 
         // Graphique 2 : Répartition des segments pour les 5 marques principales
-        const clean2 = raw.filter(row => row.Make && row.Model && row["Market Category"]);
+        const clean2 = raw.filter(
+          row => row.Make && row.Model && row["Market Category"] && row["Market Category"] !== "N/A"
+        );        
         const uniqueMarketModels = [];
         const seen2 = new Set();
         clean2.forEach(row => {
@@ -107,7 +109,13 @@ const Graph4 = () => {
         setTrace2(traceData2);
 
         // Graphique 3 : Diversité des segments vs popularité moyenne
-        const clean3 = raw.filter(row => row.Make && row.Model && row["Market Category"] && row.Popularity);
+        const clean3 = raw.filter(row =>
+          row.Make &&
+          row.Model &&
+          row["Market Category"] &&
+          row["Market Category"] !== "N/A" &&
+          row.Popularity
+        );        
         const seen3 = new Set();
         const uniqueMarketModels3 = [];
         clean3.forEach(row => {
