@@ -6,7 +6,7 @@ const Footer = () => {
     <footer>
       <Container maxWidth="lg">
         <Typography variant="body2" color="textSecondary" align="center">
-          &copy; {new Date().getFullYear()} PSID. Tous droits réservés.
+          &copy; {new Date().getFullYear()} PSID-AutoPredict. Tous droits réservés.
         </Typography>
       </Container>
     </footer>

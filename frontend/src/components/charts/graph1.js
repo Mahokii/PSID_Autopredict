@@ -292,28 +292,28 @@ const getBrandStats = () => {
           config={{ responsive: true }}
           style={{ width: "100%" }}
         />
-        <div className="mt-4 text-gray-700 leading-relaxed space-y-4">
+<div className="mt-4 text-gray-700 leading-relaxed space-y-4">
   <p>
-    Ce graphique nous livre une vue d’ensemble sur le marché de l’automobile (neuf + occasion) tel qu’il apparaît en 2017.
+    Ce graphique nous livre une vue d’ensemble sur le marché de l’automobile (neuf + occasion) tel qu’il apparaît dans notre jeu de données.
   </p>
   <p>
-    Les véhicules les plus anciens (1990–1999) se vendent en moyenne <strong>sous la barre des 10 000 $</strong>, reflétant une forte dépréciation avec le temps.
+    Les véhicules les plus anciens (1990–1999) se vendent en moyenne <strong>sous la barre des 10 000 $</strong>, illustrant une dépréciation naturelle avec le temps.
   </p>
   <p>
-    Entre 2000 et 2002, on observe une chute abrupte du prix moyen. Cela peut s'expliquer par l’impact de régulations environnementales (ex. ZFE en France) qui pénalisent les véhicules les plus anciens.
+    Un saut notable apparaît autour de l’an 2000, où le prix moyen grimpe rapidement, probablement dû à l’intégration de modèles plus récents et mieux équipés.
   </p>
   <p>
-    À partir de 2005, la courbe évolue de façon régulière, atteignant près de <strong>37 000 $</strong> en 2017. Cela indique une montée en gamme du marché automobile.
+    Entre 2005 et 2015, le prix moyen oscille entre <strong>45 000 $</strong> et <strong>60 000 $</strong>, ce qui reflète une part croissante de véhicules premium ou haut de gamme dans le dataset.
   </p>
   <p>
-    On peut ainsi déduire qu’il <strong>n’est pas rentable d’acheter un véhicule de plus de 15 ans</strong>, car il subit une dépréciation importante les années suivantes.
+    On observe que les véhicules de plus de <strong>15 ans</strong> subissent une forte décote, souvent sous les <strong>15 000 $</strong>, ce qui remet en question leur rentabilité à long terme.
   </p>
   <p className="italic">
-    Après avoir saisi cette tendance générale, une question logique émerge : <br />
-    <strong>Est-ce que tous les véhicules se déprécient au même rythme ?</strong>
+    Après avoir saisi cette tendance globale, une question s’impose : <br />
+    <strong>Est-ce que tous les véhicules se déprécient de la même façon ?</strong>
   </p>
   <p>
-    Pour répondre, nous allons maintenant nous intéresser à un facteur visuel et fonctionnel : <strong>le style de carrosserie</strong>.
+    Pour y répondre, examinons maintenant un facteur lié à l’aspect visuel et fonctionnel : <strong>le style de carrosserie</strong>.
   </p>
 </div>
 
@@ -379,33 +379,30 @@ const getBrandStats = () => {
           config={{ responsive: true }}
           style={{ width: "100%" }}
         />
-        <div className="mt-4 text-gray-700 leading-relaxed space-y-4">
-          <p>
-            Chaque courbe représente un style de carrosserie, et la hauteur de la courbe indique le <strong>prix moyen</strong> de ce style à chaque année.
-          </p>
-          <p>
-            Les <strong>SUV 4 portes</strong>, <strong>Convertibles</strong> et <strong>Crew Cab Pickups</strong> affichent des prix élevés même plusieurs années après leur mise en circulation, témoignant d’une <strong>forte demande</strong> et d’une bonne <strong>retenue de valeur</strong>.
-          </p>
-          <p>
-            À l’inverse, les <strong>Cargo Vans</strong>, <strong>2dr Hatchbacks</strong> ou <strong>Sedans</strong> se situent souvent sous la barre des <strong>20 000 $</strong> même pour des modèles récents. Ces styles, plus utilitaires ou classiques, sont <strong>moins valorisés à la revente</strong>.
-          </p>
-          <p>
-            Le cas du <strong>Convertible SUV</strong>, bien que rare, se distingue par des valeurs très élevées, probablement dues à sa <strong>rareté</strong> et son <strong>image haut de gamme</strong>.
-          </p>
-          <p>
-            Le style de carrosserie a donc un impact direct sur la dépréciation. Les véhicules <strong>familiaux, utilitaires ou économiques</strong> perdent de la valeur plus vite, tandis que les véhicules <strong>plaisir ou valorisants</strong> conservent mieux leur valeur.
-          </p>
-          <p>
-            Cependant, il est important de noter qu’<strong>au-delà de 15 ans</strong>, la valeur de la plupart des véhicules converge vers <strong>10 000 $</strong>.
-          </p>
-          <p className="italic">
-            Le style, c’est ce que l’on voit. C’est ce qui attire, ce qui influence l’usage. <br />
-            Mais au-delà de l’esthétique, il y a aussi une logique stratégique de <strong>positionnement marketing</strong>.
-          </p>
-          <p>
-            C’est ce que nous allons explorer dans le graphique suivant, à travers les <strong>catégories de marché</strong>.
-          </p>
-        </div>
+<div className="mt-4 text-gray-700 leading-relaxed space-y-4">
+  <p>
+    Chaque courbe représente un style de carrosserie, et la hauteur indique le <strong>prix moyen</strong> par année.
+  </p>
+  <p>
+    Les <strong>SUV 4 portes</strong>, <strong>Convertibles</strong> et <strong>Crew Cab Pickups</strong> conservent des prix élevés, même plusieurs années après leur sortie, témoignant d’une <strong>bonne rétention de valeur</strong>.
+  </p>
+  <p>
+    À l’opposé, les <strong>Cargo Vans</strong>, <strong>2dr Hatchbacks</strong> ou <strong>Sedans</strong> restent sous les <strong>25 000 $</strong> pour la majorité des années, ce qui reflète un positionnement plus économique ou utilitaire.
+  </p>
+  <p>
+    Certains styles rares comme les <strong>Convertible SUV</strong> affichent des pics de prix, mais leur représentation est marginale.
+  </p>
+  <p>
+    Le style influence donc directement la valeur résiduelle : les véhicules <strong>plaisir ou statutaires</strong> conservent mieux leur prix, tandis que les véhicules <strong>utilitaires ou classiques</strong> subissent une dépréciation plus marquée.
+  </p>
+  <p>
+    On note enfin qu’au-delà de 15 ans, la plupart des styles convergent vers une zone de <strong>dépréciation avancée</strong>, en dessous des <strong>15 000 $</strong>.
+  </p>
+  <p className="italic">
+    Le style de carrosserie n’est pas qu’une question d’esthétique : c’est un levier marketing puissant, que nous allons maintenant relier à la notion de <strong>segment de marché</strong>.
+  </p>
+</div>
+
 
       </div>
 
@@ -467,23 +464,24 @@ const getBrandStats = () => {
           config={{ responsive: true }}
           style={{ width: "100%" }}
         />
-        <div className="mt-4 text-gray-700 leading-relaxed space-y-4">
-          <p>
-            Ce graphique s'intéresse à la <strong>catégorie marketing</strong> des véhicules, c’est-à-dire à leur <strong>positionnement commercial</strong>.
-          </p>
-          <p>
-            Les segments <strong>Exotic</strong>, <strong>High-Performance</strong> et <strong>Luxury</strong> dominent, avec des prix qui dépassent souvent les <strong>60 000 $</strong>, même pour des modèles de 5 à 10 ans. Ces véhicules sont hautement valorisés et souvent rares.
-          </p>
-          <p>
-            À l’opposé, les catégories <strong>Diesel</strong>, <strong>Hatchback</strong> ou <strong>Flex Fuel</strong> affichent des valeurs nettement inférieures. Ils sont souvent conçus pour l’économie ou l’environnement, et subissent une dépréciation plus rapide.
-          </p>
-          <p>
-            Le segment <strong>Crossover</strong>, en pleine expansion, montre une très bonne tenue de valeur : il combine polyvalence, confort et image moderne, ce qui en fait un choix stratégique.
-          </p>
-          <p className="font-semibold">
-            En résumé, <strong>la perception marketing influence fortement la valeur résiduelle</strong> : un véhicule "exotique", "hybride" ou "haut de gamme" est vendu plus cher et conserve mieux sa valeur au fil du temps.
-          </p>
-        </div>
+<div className="mt-4 text-gray-700 leading-relaxed space-y-4">
+  <p>
+    Ce graphique explore les <strong>catégories marketing</strong>, c’est-à-dire la manière dont les véhicules sont positionnés commercialement (luxe, performance, écolo, etc.).
+  </p>
+  <p>
+    Les segments <strong>Exotic</strong>, <strong>High-Performance</strong> et <strong>Luxury</strong> dépassent souvent les <strong>100 000 $</strong>, même pour des modèles anciens, ce qui reflète leur rareté et leur image valorisante.
+  </p>
+  <p>
+    À l’opposé, les catégories <strong>Diesel</strong>, <strong>Hatchback</strong> ou <strong>Flex Fuel</strong> conservent des valeurs plus faibles et tendent à décroître rapidement.
+  </p>
+  <p>
+    Le segment <strong>Crossover</strong> se distingue par sa régularité : il affiche une bonne stabilité de prix dans le temps, illustrant son attrait polyvalent.
+  </p>
+  <p className="font-semibold">
+    En somme, <strong>la perception marketing joue un rôle central</strong> : plus une catégorie évoque la performance, le prestige ou la rareté, plus elle garde de la valeur.
+  </p>
+</div>
+
       </div>
 
     </div>
