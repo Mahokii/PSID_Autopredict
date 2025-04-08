@@ -1,9 +1,9 @@
+import { Box, Container, Paper, Typography } from '@mui/material';
 import React from 'react';
-import { Container, Typography, Paper, Box } from '@mui/material';
 import Graph1 from '../charts/graph1';
 import Graph2 from '../charts/graph2';
 import Graph3 from '../charts/graph3';
-import Graph4 from '../charts/graph4'; 
+import Graph4 from '../charts/graph4';
 
 const DashboardPage = () => {
   return (
@@ -26,14 +26,14 @@ const DashboardPage = () => {
 
           <Box mt={6}>
             <Typography variant="h4" gutterBottom>
-              Quel type de transmission est le plus économique ?
+              Quels sont les avantages sur l’achat d’une voiture selon son type de transmission ?
             </Typography>
             <Graph2 />
           </Box>
 
           <Box mt={6}>
             <Typography variant="h4" gutterBottom>
-              Est-il possible d'allier performance, économie de carburant et prix d'achat faible ?
+              Est ce que l'achat d'un véhicule performant impact la consommation en carburant et son prix ?
             </Typography>
             <Graph3 /> 
           </Box>
