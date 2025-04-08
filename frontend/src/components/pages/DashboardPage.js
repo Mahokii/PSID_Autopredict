@@ -1,12 +1,9 @@
 import React from 'react';
 import { Container, Typography, Paper, Box } from '@mui/material';
-import DataChart from '../charts/DataChart';
-
-const data = [
-  { x: 1, y: 2, z: 3 },
-  { x: 4, y: 5, z: 6 },
-  { x: 7, y: 8, z: 9 },
-];
+import Graph1 from '../charts/graph1';
+import Graph2 from '../charts/graph2';
+import Graph3 from '../charts/graph3';
+import Graph4 from '../charts/graph4'; 
 
 const DashboardPage = () => {
   return (
@@ -17,17 +14,35 @@ const DashboardPage = () => {
             Tableau de Bord des Données
           </Typography>
           <Typography variant="body1">
-            Explorez ici des statistiques détaillées notre jeux de données sur les caractéristiques des voitures. Grâce aux graphiques interactifs ci-dessous, vous pourrez approfondir votre compréhension des tendances et des facteurs clés liés à ces véhicules.
+            Explorez ici des statistiques détaillées de notre jeu de données sur les caractéristiques des voitures. Grâce aux graphiques interactifs ci-dessous, vous pourrez approfondir votre compréhension des tendances et des facteurs clés liés à ces véhicules.
           </Typography>
 
-          <Box mb={4} mt={4}>
-            <Typography variant="h4" component="h2" gutterBottom>
-              Graphique test
+          <Box mt={6}>
+            <Typography variant="h4" gutterBottom>
+              Comment l'ancienneté d'une voiture affecte-t-elle son prix ?
             </Typography>
-            <Typography variant="body1">
-              Bla blsizefhrfiuoghreiuogeroguerguioreghureguioerh
+            <Graph1 />
+          </Box>
+
+          <Box mt={6}>
+            <Typography variant="h4" gutterBottom>
+              Quel type de transmission est le plus économique ?
             </Typography>
-            <DataChart data={data} />
+            <Graph2 />
+          </Box>
+
+          <Box mt={6}>
+            <Typography variant="h4" gutterBottom>
+              Est-il possible d'allier performance, économie de carburant et prix d'achat faible ?
+            </Typography>
+            <Graph3 /> 
+          </Box>
+          
+          <Box mt={6}>
+            <Typography variant="h4" gutterBottom>
+              La diversité des gammes constructeurs a-t-elle un impact sur leurs popularités ?
+            </Typography>
+            <Graph4 />
           </Box>
 
         </Paper>
