@@ -1,0 +1,5 @@
+Code source de notre projet : https://github.com/Mahokii/PSID_Autopredict
+
+code video: https://youtube.com/playlist?list=PLnd0u3zvfsT8ZiwQ2ev6k14MN6GVPcvSB&si=Vgavy4EHaM65LuiB
+
+Accès au site du projet : localhost:3000
