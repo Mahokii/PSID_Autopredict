@@ -248,33 +248,30 @@ const Graph3 = () => {
             autosize: true,
             height: 600,
             xaxis: {
-              title: { 
+              title: {
                 text: "Type de puissance moteur",
-                font: {
-                  size: 16,
-                  color: '#333'
-                }
-                },
+                font: { size: 16, color: '#333' }
+              },
               categoryorder: "array",
               categoryarray: ["Très faible", "Faible", "Moyenne", "Élevée", "Très élevée"]
             },
             yaxis: {
               title: {
                 text: "Prix moyen ($)",
-                font: {
-                  size: 16,
-                  color: '#333'
-                }
+                font: { size: 16, color: '#333' }
               },
               tickprefix: "$",
             },
             legend: {
               title: { text: "Catégorie de véhicule" },
-              orientation: "h",
-              y: -0.3
+              orientation: "v",    // affichage vertical
+              x: 1.05,              // position à droite du graphique
+              y: 1,
+              xanchor: "left"
             },
-            margin: { t: 50, b: 120 }
+            margin: { t: 60, b: 100, r: 200 } // espace à droite pour la légende
           }}
+          
           config={{ responsive: true }}
           style={{ width: "100%" }}
         />
