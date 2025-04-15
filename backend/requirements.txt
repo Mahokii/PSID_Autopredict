@@ -6,3 +6,6 @@ pydantic
 alembic
 pymongo
 pandas
+scikit-learn
+numpy
+joblib

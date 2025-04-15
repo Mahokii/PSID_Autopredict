@@ -64,7 +64,7 @@ print(len(df), "lignes après suppression des valeurs inconnues.")
 print(f"✅ Données nettoyées prêtes à l'insertion : {len(df)} lignes.")
 
 # Connexion MongoDB
-client = MongoClient("mongodb://mongo_db:27017/")
+client = MongoClient("mongodb://admin:admin@mongodb:27017/?authSource=admin")
 db = client["voitureDB"]
 collection = db["voitures"]
 
