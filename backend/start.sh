@@ -14,4 +14,4 @@ echo "▶ Lancement de train_model ..."
 python train_model.py
 
 echo "▶ Lancement du serveur FastAPI..."
-uvicorn app.main:app --host 0.0.0.0 --port 8000
+PYTHONPATH=/app uvicorn app.main:app --host 0.0.0.0 --port 8000

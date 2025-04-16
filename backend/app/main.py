@@ -1,11 +1,7 @@
 from fastapi import FastAPI
+from app.api.predict import router as predict_router
 
-app = FastAPI()
+app = FastAPI(title="PSID API 🚗")
 
-@app.get("/")
-async def root():
-    return {"message": "Hello, World!"}
-
-@app.get("/health")
-async def health():
-    return {"status": "ok"}
+# Inclusion des routes
+app.include_router(predict_router, prefix="/api")
