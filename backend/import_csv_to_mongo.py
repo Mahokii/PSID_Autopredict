@@ -1,13 +1,32 @@
 import pandas as pd
 from pymongo import MongoClient
+import unicodedata
+
+def remove_accents(text):
+    if isinstance(text, str):
+        return unicodedata.normalize('NFKD', text).encode('ascii', errors='ignore').decode('utf-8')
+    return text
+
+def simplify_fuel_type(fuel_type):
+    if fuel_type in ['premium unleaded (required)', 'premium unleaded (recommended)', 'regular unleaded']:
+        return 'essence'
+    elif fuel_type in ['flex-fuel (unleaded/e85)', 'flex-fuel (premium unleaded recommended/e85)', 
+                       'flex-fuel (premium unleaded required/e85)', 'flex-fuel (unleaded/natural gas)']:
+        return 'flex-fuel'
+    elif fuel_type == 'diesel':
+        return 'diesel'
+    elif fuel_type == 'electric':
+        return 'electrique'
+    elif fuel_type == 'natural gas':
+        return 'gaz naturel'
+    else:
+        return 'autre'
 
 print("📥 Lecture du fichier voiture.csv...")
 df = pd.read_csv("voiture.csv")
+print(f"🧼 {len(df)} lignes initiales.")
 
-print("🧼 Nettoyage des données...")
-print(len(df), "lignes lues.")
-
-# Renommer les colonnes
+# Standardisation des colonnes
 df.columns = df.columns.str.lower().str.replace(" ", "_")
 df.rename(columns={
     'engine_fuel_type': 'fuel_type',
@@ -22,56 +41,42 @@ df.rename(columns={
     'msrp': 'price'
 }, inplace=True)
 
-# Supprimer les doublons
-print('Number of duplicates are : ', df.duplicated().sum())
+# Suppression des doublons
 df = df.drop_duplicates()
-print(len(df), "lignes après suppression des doublons.")
+print(f"✅ {len(df)} lignes après suppression des doublons.")
 
-print('Number of missing values in each columns are below : ')
-print(df.isnull().sum())
-
-# Supprimer les colonnes inutiles
-df.drop('market', axis = 1, inplace = True)
-df.drop('popularity', axis = 1, inplace = True)
-
-
-# Remplissage des valeurs manquantes
+# Valeurs manquantes
 df['fuel_type'] = df['fuel_type'].fillna('regular unleaded')
-df['hp'] = df['hp'].fillna(0)
-df['cylinders'] = df['cylinders'].fillna(0)
+df['hp'] = df['hp'].fillna(df['hp'].mean())
+df['cylinders'] = df['cylinders'].fillna(0.0)
 df['doors'] = df['doors'].fillna(df['doors'].mean())
 
-# Conversion des types
+# Nettoyage texte
+for col in ['make', 'model', 'fuel_type', 'transmission', 'drive', 'market', 'size', 'style']:
+    df[col] = df[col].astype(str).str.lower().apply(remove_accents)
+
+# Simplification fuel_type
+df['fuel_type'] = df['fuel_type'].apply(simplify_fuel_type)
+
+# Suppression colonnes inutiles
+df.drop(['market', 'popularity', 'doors', 'highway_mpg', 'city_mpg'], axis=1, inplace=True)
+
+# Suppression inconnues
+df = df[df['transmission'] != 'unknown']
+df = df[df['fuel_type'] != 'unknown']
+
+# Nettoyage final
 df['price'] = pd.to_numeric(df['price'], errors='coerce')
 df['year'] = pd.to_numeric(df['year'], errors='coerce')
-
-# Supprimer les lignes critiques vides
 df.dropna(subset=['price', 'year'], inplace=True)
 
-# Nettoyage des chaînes
-df['make'] = df['make'].str.strip().str.title()
-df['model'] = df['model'].str.strip().str.title()
+print("✅ Données nettoyées prêtes à l'insertion :", len(df), "lignes.")
+print("🧾 Colonnes finales :", df.columns.tolist())
 
-# Supression des voitures ayant unknown
-
-df.drop(df[df['transmission']=='UNKNOWN'].index, axis='index', inplace = True)
-print('Number of missing values in each columns are below : ')
-print(df.isnull().sum())
-print(len(df), "lignes après suppression des valeurs inconnues.")
-
-
-
-print(f"✅ Données nettoyées prêtes à l'insertion : {len(df)} lignes.")
-
-# Connexion MongoDB
+# Insertion MongoDB
 client = MongoClient("mongodb://admin:admin@mongodb:27017/?authSource=admin")
 db = client["voitureDB"]
 collection = db["voitures"]
-
-# Nettoyage de la collection
 collection.drop()
-
-# Insertion des données nettoyées
 collection.insert_many(df.to_dict(orient="records"))
-
-print("🎉 Données nettoyées insérées avec succès dans 'voitureDB.voitures'")
+print("🎉 Données insérées avec succès dans 'voitureDB.voitures'")

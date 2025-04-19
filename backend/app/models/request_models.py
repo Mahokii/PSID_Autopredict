@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from typing import Optional
 
 class VehicleInput(BaseModel):
     make: str
@@ -6,11 +7,8 @@ class VehicleInput(BaseModel):
     year: int
     fuel_type: str
     hp: float
-    cylinders: float
     transmission: str
-    drive: str
-    doors: float
-    size: str
-    style: str
-    highway_mpg: float
-    city_mpg: float
+    cylinders: Optional[float] = None
+    drive: Optional[str] = None
+    size: Optional[str] = None
+    style: Optional[str] = None

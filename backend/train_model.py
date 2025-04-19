@@ -1,88 +1,69 @@
 import pandas as pd
-import numpy as np
-from pymongo import MongoClient
-from sklearn.ensemble import RandomForestRegressor
-from sklearn.metrics import mean_squared_error, r2_score
-from sklearn.model_selection import train_test_split, KFold
 import joblib
-import os
+from pymongo import MongoClient
+from pathlib import Path
+from sklearn.model_selection import train_test_split, cross_val_score, cross_val_predict
+from sklearn.metrics import mean_squared_error, r2_score
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.preprocessing import LabelEncoder
+import numpy as np
 
-# ✅ Connexion MongoDB corrigée
-client = MongoClient("mongodb://admin:admin@mongodb:27017/?authSource=admin")
+from features import CATEGORICAL_COLS, NUMERICAL_COLS, FEATURES_TO_KEEP
+
+# --- Connexion MongoDB ---
+client = MongoClient("mongodb://admin:admin@mongodb:27017/")
 db = client["voitureDB"]
 collection = db["voitures"]
+
+print("📥 Données chargées depuis MongoDB...")
 df = pd.DataFrame(list(collection.find()))
 
-if "_id" in df.columns:
-    df.drop(columns=["_id"], inplace=True)
+# Suppression de l'_id Mongo
+df.drop(columns=["_id"], inplace=True)
 
-print(f"📥 Données chargées depuis MongoDB : {df.shape[0]} lignes")
+# Suppression des outliers sur la colonne price (quantile à 0.85)
+price_threshold = df["price"].quantile(0.85)
+df = df[df["price"] <= price_threshold]
+print(f"✅ Seuil appliqué (quantile 0.85) : {price_threshold:.2f}")
+print(f"✅ Lignes restantes après filtrage : {len(df)}")
 
-# Suppression des outliers uniquement sur le prix
-print("✂️ Suppression des outliers uniquement sur la colonne 'price'...")
-seuil = df["price"].quantile(0.85)
-df = df[df["price"] < seuil]
-print(f"✅ Seuil appliqué (80e percentile) : {seuil:.2f}")
-print(f"✅ Lignes restantes après filtrage : {df.shape[0]}")
+# Réduction du dataframe aux colonnes conservées
+df = df[FEATURES_TO_KEEP + ["price"]]
+print(f"🧾 Colonnes utilisées : {df.columns.tolist()}")
 
-# Features
-features = ['make', 'model', 'year', 'fuel_type', 'hp', 'cylinders', 'transmission',
-            'drive', 'doors', 'size', 'style', 'highway_mpg', 'city_mpg']
-target = 'price'
-
-X = df[features].copy()
-y = df[target].copy()
-
-# Split
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=1)
-
-# Encodage
-categorical = ['make', 'model', 'fuel_type', 'transmission', 'drive', 'size', 'style']
-numerical = ['year', 'hp', 'cylinders', 'doors', 'highway_mpg', 'city_mpg']
+# Encodage LabelEncoder
 encoders = {}
+for col in CATEGORICAL_COLS:
+    encoder = LabelEncoder()
+    df[col] = encoder.fit_transform(df[col])
+    encoders[col] = encoder
+    print(f"🔤 {col} : {len(encoder.classes_)} classes")
 
-for col in categorical:
-    X_train[col] = X_train[col].astype(str).str.strip().str.upper()
-    X_test[col] = X_test[col].astype(str).str.strip().str.upper()
-
-print("\n🔤 Encodage manuel des variables catégorielles...")
-for col in categorical:
-    values = sorted(X_train[col].dropna().unique())
-    mapping = {v: i for i, v in enumerate(values)}
-    encoders[col] = mapping
-    print(f" - {col} : {len(mapping)} classes")
-    X_train[col] = X_train[col].map(mapping)
-    X_test[col] = X_test[col].map(lambda x: mapping.get(x, -1))
-
-# Encodage exemple
-preview = X[categorical].iloc[:10].copy()
-for col in categorical:
-    preview[f"{col}_encoded"] = preview[col].map(encoders[col]).fillna(-1)
-print("\n📊 Tableau encodé (10 premières lignes) :")
-print(preview)
-
-# Normalisation
+# Normalisation des variables numériques entre 0 et 1
 normalizers = {}
-print("\n📏 Normalisation des colonnes numériques...")
-for col in numerical:
-    min_val = X_train[col].min()
-    max_val = X_train[col].max()
+for col in NUMERICAL_COLS:
+    min_val, max_val = df[col].min(), df[col].max()
+    df[col] = (df[col] - min_val) / (max_val - min_val)
     normalizers[col] = (min_val, max_val)
-    X_train[col] = (X_train[col] - min_val) / (max_val - min_val)
-    X_test[col] = (X_test[col] - min_val) / (max_val - min_val)
-    print(f" - {col} : min={min_val:.2f}, max={max_val:.2f}")
+    print(f"📏 Normalisation {col} : min={min_val}, max={max_val}")
 
-# Entraînement
-model = RandomForestRegressor(n_estimators=100, max_depth=10, random_state=1)
+# Séparation X / y
+X = df.drop(columns=["price"])
+y = df["price"]
+
+# Split et entraînement
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+model = RandomForestRegressor(n_estimators=100, random_state=42)
 model.fit(X_train, y_train)
 
 # Évaluation
-train_pred = model.predict(X_train)
-test_pred = model.predict(X_test)
-train_rmse = np.sqrt(mean_squared_error(y_train, train_pred))
-test_rmse = np.sqrt(mean_squared_error(y_test, test_pred))
-train_r2 = r2_score(y_train, train_pred)
-test_r2 = r2_score(y_test, test_pred)
+y_pred_train = model.predict(X_train)
+y_pred_test = model.predict(X_test)
+
+train_r2 = r2_score(y_train, y_pred_train)
+train_rmse = np.sqrt(mean_squared_error(y_train, y_pred_train))
+test_r2 = r2_score(y_test, y_pred_test)
+test_rmse = np.sqrt(mean_squared_error(y_test, y_pred_test))
 
 print("\n--- 🎯 Résultats entraînement ---")
 print(f"Train R²: {train_r2:.4f}")
@@ -94,62 +75,61 @@ print(f"Test R²: {test_r2:.4f}")
 print(f"Test RMSE: {test_rmse:.2f}")
 print(f"Test RMSE %: {(test_rmse / y_test.mean()) * 100:.2f}%")
 
-# Cross-validation
+# --- 🔄 Cross-validation ---
+cv_scores = cross_val_score(model, X, y, cv=5, scoring="r2")
 print("\n--- 🔄 Cross-validation ---")
-kf = KFold(n_splits=5, shuffle=True, random_state=1)
-cv_scores = []
-for train_idx, val_idx in kf.split(X_train):
-    model.fit(X_train.iloc[train_idx], y_train.iloc[train_idx])
-    pred = model.predict(X_train.iloc[val_idx])
-    score = r2_score(y_train.iloc[val_idx], pred)
-    cv_scores.append(score)
 print(f"Scores R² : {np.round(cv_scores, 4)}")
 print(f"Moyenne R² : {np.mean(cv_scores):.4f}, écart-type : {np.std(cv_scores):.4f}")
 
-# Exemple utilisateur
-print("\n🔍 Exemple utilisateur : prédiction")
-fake_input = pd.DataFrame([{
-    'make': 'BMW',
-    'model': '5 Series',
-    'year': 2016,
-    'fuel_type': 'premium unleaded (required)',
-    'hp': 248,
-    'cylinders': 4,
+# ✅ Calcul du RMSE moyen en cross-validation
+cv_preds = cross_val_predict(model, X, y, cv=5)
+cv_rmse = np.sqrt(mean_squared_error(y, cv_preds))
+cv_rmse_percent = (cv_rmse / y.mean()) * 100
+print(f"Cross-val RMSE : {cv_rmse:.2f}")
+print(f"Cross-val RMSE % : {cv_rmse_percent:.2f}%")
+
+# Prédiction exemple utilisateur
+example_input = {
+    'make': 'bmw',
+    'model': '5 series',
+    'year': 2017,
+    'fuel_type': 'essence',
+    'hp': 300,
+    'cylinders': 6,
     'transmission': 'automatic',
-    'drive': 'all wheel drive',
-    'doors': 4,
-    'size': 'large',
-    'style': 'sedan',
-    'highway_mpg': 34,
-    'city_mpg': 24
-}])
+    'drive': 'rear wheel drive',
+    'size': 'midsize',
+    'style': 'sedan'
+}
+example_df = pd.DataFrame([example_input])
 
-# Harmonisation input utilisateur
-for col in categorical:
-    fake_input[col] = fake_input[col].astype(str).str.strip().str.upper()
+# Encodage de l'exemple utilisateur
+for col in CATEGORICAL_COLS:
+    if col in example_df.columns:
+        example_df[col] = example_df[col].apply(
+            lambda x: encoders[col].transform([x])[0]
+            if x in encoders[col].classes_
+            else -1
+        )
+for col in NUMERICAL_COLS:
+    if col in example_df.columns:
+        min_val, max_val = normalizers[col]
+        example_df[col] = (example_df[col] - min_val) / (max_val - min_val)
 
-# Encodage
-for col in categorical:
-    val = fake_input[col].values[0]
-    code = encoders[col].get(val, -1)
-    fake_input[col] = code
-    if code == -1:
-        print(f"⚠️ Label inconnu pour '{col}': {val}")
+# Réaligner les colonnes
+for col in X_train.columns:
+    if col not in example_df.columns:
+        example_df[col] = 0
+example_df = example_df[X_train.columns]
 
-# Normalisation
-for col in numerical:
-    min_val, max_val = normalizers[col]
-    fake_input[col] = (fake_input[col] - min_val) / (max_val - min_val)
-
-print("\n📋 Encodage exemple utilisateur :")
-print(fake_input.T)
-
-prediction = model.predict(fake_input)[0]
-print(f"\n💡 Prédiction : {prediction:,.2f} $")
+example_price = model.predict(example_df)[0]
+print(f"\n💡 Prédiction pour l'exemple utilisateur : {example_price:.2f} €")
 
 # Sauvegarde
-os.makedirs("backend/models", exist_ok=True)
-joblib.dump(model, "backend/models/random_forest_model.joblib")
-joblib.dump(encoders, "backend/models/encoders.joblib")
-joblib.dump(normalizers, "backend/models/normalizers.joblib")
+Path("models").mkdir(parents=True, exist_ok=True)
+joblib.dump(model, Path("models/random_forest_model.joblib"))
+joblib.dump(encoders, Path("models/encoders.joblib"))
+joblib.dump(normalizers, Path("models/normalizers.joblib"))
+joblib.dump(cv_rmse_percent, Path("models/cv_rmse_percent.joblib"))  # 👈 ajouté ici
+
 print("\n✅ Modèle et encodeurs sauvegardés dans 'backend/models/'")

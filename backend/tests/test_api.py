@@ -1,9 +1,7 @@
 import requests
 
-# L’URL de ton API locale
 url = "http://localhost:8000/api/predict_price"
 
-# Exemple de données pour un véhicule
 vehicle_data = {
     "make": "BMW",
     "model": "5 Series",
@@ -13,21 +11,22 @@ vehicle_data = {
     "cylinders": 4,
     "transmission": "Automatic",
     "drive": "Rear Wheel Drive",
-    "doors": 4,
     "size": "Midsize",
     "style": "Sedan",
-    "highway_mpg": 34,
-    "city_mpg": 24
+
 }
 
-# Envoi de la requête POST
+print("🔎 Données envoyées :")
+print(vehicle_data)
+
 response = requests.post(url, json=vehicle_data)
 
-# Affichage du résultat
 if response.status_code == 200:
-    print("✅ Prédiction réussie :")
-    print(response.json())
+    data = response.json()
+    if "predicted_price" in data:
+        print(f"✅ Prédiction réussie : {data['predicted_price']} €")
+    else:
+        print("⚠️ Champ 'predicted_price' manquant dans la réponse :", data)
 else:
-    print("❌ Erreur lors de la prédiction :")
-    print(f"Code : {response.status_code}")
+    print(f"❌ Erreur {response.status_code} lors de la prédiction")
     print(response.text)
