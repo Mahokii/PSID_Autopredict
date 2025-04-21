@@ -1,34 +1,25 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Typography, Paper, Box, TextField, Button, FormControl, FormControlLabel, Radio, RadioGroup, Collapse, MenuItem, Select } from '@mui/material';
-import { ExpandMore as ExpandMoreIcon } from '@mui/icons-material';
+import { Container, Typography, Paper, Box, TextField, Button, MenuItem, Select } from '@mui/material';
+import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import Papa from 'papaparse';
 import brandcsv from '../ressources/companies.csv';
+import { predictPrice } from '../services/api';
 
 const ModelMLPage = () => {
   const [formData, setFormData] = useState({
-    mode: 'price', // 'price' or 'characteristics'
     make: '',
     model: '',
     year: '',
-    engineFuelType: '',
-    engineHp: '',
-    engineCylinders: '',
-    transmissionType: '',
-    drivenWheels: '',
-    numberOfDoors: '',
-    marketCategory: '',
-    vehicleSize: '',
-    highwayMpg: '',
-    cityMpg: '',
-    popularity: '',
-    msrp: ''
+    fuel_type: '',
+    hp: '',
+    transmission: ''
   });
 
-  const [openOptional, setOpenOptional] = useState(false);
   const [brands, setBrands] = useState([]);
+  const [prediction, setPrediction] = useState(null);
 
   useEffect(() => {
-    // Chargez le fichier CSV
     fetch(brandcsv)
       .then(response => response.text())
       .then(data => {
@@ -49,124 +40,178 @@ const ModelMLPage = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Logique pour soumettre les données du formulaire
-    console.log(formData);
+    try {
+      // Simulated backend response
+      const mockResponse = {
+        predict_price: 25000,
+        "RMSE%": 5,
+        make: formData.make,
+        model: formData.model,
+        year: formData.year,
+        fuel_type: formData.fuel_type,
+        hp: formData.hp,
+        transmission: formData.transmission
+      };
+      setPrediction(mockResponse);
+    } catch (error) {
+      console.error('Error fetching prediction:', error);
+    }
   };
 
-  const requiredFieldsPrice = ['make', 'model', 'year', 'engineFuelType'];
-  const requiredFieldsCharacteristics = ['msrp'];
+  const handleReset = () => {
+    setFormData({
+      make: '',
+      model: '',
+      year: '',
+      fuel_type: '',
+      hp: '',
+      transmission: ''
+    });
+    setPrediction(null);
+  };
 
+  const handleDateChange = (newValue) => {
+    setFormData({
+      ...formData,
+      year: newValue ? newValue.getFullYear() : '' // Conserver l'année comme chaîne pour le formulaire
+    });
+  };
 
   return (
-    <Container maxWidth="lg">
-      <Box my={4}>
-        <Paper elevation={3} style={{ padding: '20px' }}>
-          <Typography variant="h4" component="h1" gutterBottom>
-            Car Price Predictor
-          </Typography>
-          <Typography variant="body1" gutterBottom>
-            Utilisez ce formulaire pour prédire le prix d'un véhicule en fonction de ses caractéristiques ou pour déterminer les caractéristiques d'un véhicule en fonction de son prix.
-          </Typography>
-          <form onSubmit={handleSubmit}>
-            <FormControl component="fieldset">
-              <RadioGroup
-                row
-                aria-label="mode"
-                name="mode"
-                value={formData.mode}
-                onChange={handleChange}
-              >
-                <FormControlLabel value="price" control={<Radio />} label="Prédire le prix" />
-                <FormControlLabel value="characteristics" control={<Radio />} label="Prédire les caractéristiques" />
-              </RadioGroup>
-            </FormControl>
-
-            {formData.mode === 'characteristics' && (
-              <Box mb={2}>
-                <TextField
-                  fullWidth
-                  required
-                  label="Prix estimé"
-                  name="msrp"
-                  value={formData.msrp}
-                  onChange={handleChange}
-                  variant="outlined"
-                />
+    <LocalizationProvider dateAdapter={AdapterDateFns}>
+      <Container maxWidth="lg">
+        <Box my={4}>
+          <Paper elevation={3} style={{ padding: '20px' }}>
+            <Typography variant="h4" component="h1" gutterBottom>
+              Car Price Predictor
+            </Typography>
+            {prediction ? (
+              <Box textAlign="center">
+                <Typography variant="h2" color="primary">
+                  Prix estimé: {prediction.predict_price} €
+                </Typography>
+                <Typography variant="h5" color="textSecondary">
+                  Erreur (RMSE%): {prediction['RMSE%']}%
+                </Typography>
+                <Typography variant="body1" color="textSecondary">
+                  Marque: {prediction.make}, Modèle: {prediction.model}, Année: {prediction.year},
+                  Carburant: {prediction.fuel_type}, Puissance: {prediction.hp} HP, Transmission: {prediction.transmission}
+                </Typography>
+                <Button variant="contained" color="secondary" onClick={handleReset} style={{ marginTop: '20px' }}>
+                  Faire une autre prédiction
+                </Button>
               </Box>
+            ) : (
+              <form onSubmit={handleSubmit}>
+                <Box mb={2}>
+                  <Select
+                    fullWidth
+                    required
+                    name="make"
+                    value={formData.make}
+                    onChange={handleChange}
+                    displayEmpty
+                  >
+                    <MenuItem value="" disabled>
+                      Selectionnez la marque
+                    </MenuItem>
+                    {brands.map((brand, index) => (
+                      <MenuItem key={index} value={brand.name}>
+                        <Box display="flex" alignItems="center">
+                          <img src={brand.logo_link} alt={brand.name} style={{ width: '30px', marginRight: '10px' }} />
+                          {brand.name}
+                        </Box>
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </Box>
+
+                <Box mb={2}>
+                  <TextField
+                    fullWidth
+                    required
+                    label="Modèle"
+                    name="model"
+                    value={formData.model}
+                    onChange={handleChange}
+                    variant="outlined"
+                  />
+                </Box>
+
+                <Box mb={2}>
+                  <DatePicker
+                    views={['year']}
+                    label="Année"
+                    value={formData.year ? new Date(formData.year, 0) : null} // Convertir l'année en objet Date
+                    onChange={handleDateChange}
+                    slotProps={{ textField: { fullWidth: true, error: false } }}
+                  />
+                </Box>
+
+
+                <Box mb={2}>
+                  <Select
+                    fullWidth
+                    required
+                    name="fuel_type"
+                    value={formData.fuel_type}
+                    onChange={handleChange}
+                    displayEmpty
+                  >
+                    <MenuItem value="" disabled>
+                      Selectionnez le type de carburant
+                    </MenuItem>
+                    <MenuItem value="essence">Essence</MenuItem>
+                    <MenuItem value="flex-fuel">Flex-Fuel</MenuItem>
+                    <MenuItem value="diesel">Diesel</MenuItem>
+                    <MenuItem value="electrique">Electrique</MenuItem>
+                    <MenuItem value="gaz naturel">Gaz Naturel</MenuItem>
+                  </Select>
+                </Box>
+
+                <Box mb={2}>
+                  <TextField
+                    fullWidth
+                    required
+                    label="Puissance DIN (HP)"
+                    name="hp"
+                    type="number"
+                    value={formData.hp}
+                    onChange={handleChange}
+                    variant="outlined"
+                  />
+                </Box>
+
+                <Box mb={2}>
+                  <Select
+                    fullWidth
+                    required
+                    name="transmission"
+                    value={formData.transmission}
+                    onChange={handleChange}
+                    displayEmpty
+                  >
+                    <MenuItem value="" disabled>
+                      Selectionnez la transmission
+                    </MenuItem>
+                    <MenuItem value="manual">Manuel</MenuItem>
+                    <MenuItem value="automatic">Automatique</MenuItem>
+                    <MenuItem value="automated_manual">Automatique manuel</MenuItem>
+                    <MenuItem value="direct_drive">Direct Drive</MenuItem>
+                  </Select>
+                </Box>
+
+                <Button type="submit" variant="contained" color="primary">
+                  Soumettre
+                </Button>
+              </form>
             )}
-
-            <Box mb={2}>
-              <Select
-                fullWidth
-                required={formData.mode === 'price'}
-                value={formData.make}
-                onChange={(e) => handleChange({ target: { name: 'make', value: e.target.value } })}
-                displayEmpty
-              >
-                <MenuItem value="" disabled>
-                  Sélectionnez une marque
-                </MenuItem>
-                {brands.map((brand, index) => (
-                  <MenuItem key={index} value={brand.name}>
-                    <Box display="flex" alignItems="center">
-                      <img src={brand.logo_link} alt={brand.name} style={{ width: '30px', marginRight: '10px' }} />
-                      {brand.name}
-                    </Box>
-                  </MenuItem>
-                ))}
-              </Select>
-            </Box>
-
-            {requiredFieldsPrice.filter(field => field !== 'make').map((field, index) => (
-              <Box key={index} mb={2}>
-                <TextField
-                  fullWidth
-                  required={formData.mode === 'price'}
-                  label={field.charAt(0).toUpperCase() + field.slice(1).replace('_', ' ')}
-                  name={field}
-                  value={formData[field]}
-                  onChange={handleChange}
-                  variant="outlined"
-                />
-              </Box>
-            ))}
-
-            <Box mb={2}>
-              <Button
-                variant="outlined"
-                onClick={() => setOpenOptional(!openOptional)}
-                endIcon={<ExpandMoreIcon />}
-              >
-                {openOptional ? 'Masquer les caractéristiques optionnelles' : 'Afficher les caractéristiques optionnelles'}
-              </Button>
-            </Box>
-
-            <Collapse in={openOptional}>
-              {Object.keys(formData)
-                .filter(key => !requiredFieldsPrice.includes(key) && key !== 'mode' && key !== 'msrp' && key !== 'make')
-                .map((field, index) => (
-                  <Box key={index} mb={2}>
-                    <TextField
-                      fullWidth
-                      label={field.charAt(0).toUpperCase() + field.slice(1).replace('_', ' ')}
-                      name={field}
-                      value={formData[field]}
-                      onChange={handleChange}
-                      variant="outlined"
-                    />
-                  </Box>
-                ))}
-            </Collapse>
-
-            <Button type="submit" variant="contained" color="primary">
-              Soumettre
-            </Button>
-          </form>
-        </Paper>
-      </Box>
-    </Container>
+          </Paper>
+        </Box>
+      </Container>
+    </LocalizationProvider>
   );
 };
 
