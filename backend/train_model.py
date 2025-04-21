@@ -22,7 +22,7 @@ df = pd.DataFrame(list(collection.find()))
 df.drop(columns=["_id"], inplace=True)
 
 # Suppression des outliers sur la colonne price (quantile à 0.85)
-price_threshold = df["price"].quantile(0.85)
+price_threshold = df["price"].quantile(0.75)
 df = df[df["price"] <= price_threshold]
 print(f"✅ Seuil appliqué (quantile 0.85) : {price_threshold:.2f}")
 print(f"✅ Lignes restantes après filtrage : {len(df)}")

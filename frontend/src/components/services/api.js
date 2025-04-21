@@ -6,7 +6,7 @@ const api = axios.create({
 
 export const predictPrice = async (formData) => {
   try {
-    const response = await api.post('/api/predict_price', formData);
+    const response = await api.post('/api/api/predict_price', formData);
     return response.data;
   } catch (error) {
     console.error('Error predicting price:', error);

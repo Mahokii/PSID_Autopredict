@@ -43,18 +43,9 @@ const ModelMLPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Simulated backend response
-      const mockResponse = {
-        predict_price: 25000,
-        "RMSE%": 5,
-        make: formData.make,
-        model: formData.model,
-        year: formData.year,
-        fuel_type: formData.fuel_type,
-        hp: formData.hp,
-        transmission: formData.transmission
-      };
-      setPrediction(mockResponse);
+      const response = await predictPrice(formData);
+      console.log('Prediction response:', response); // Fixed the logging method
+      setPrediction(response);
     } catch (error) {
       console.error('Error fetching prediction:', error);
     }
@@ -90,10 +81,10 @@ const ModelMLPage = () => {
             {prediction ? (
               <Box textAlign="center">
                 <Typography variant="h2" color="primary">
-                  Prix estimé: {prediction.predict_price} €
+                  Prix estimé: {prediction.predicted_price} €
                 </Typography>
                 <Typography variant="h5" color="textSecondary">
-                  Erreur (RMSE%): {prediction['RMSE%']}%
+                  Erreur (RMSE%): {prediction.cv_rmse_percent}%
                 </Typography>
                 <Typography variant="body1" color="textSecondary">
                   Marque: {prediction.make}, Modèle: {prediction.model}, Année: {prediction.year},
