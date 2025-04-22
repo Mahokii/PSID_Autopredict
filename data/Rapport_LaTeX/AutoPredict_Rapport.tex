@@ -227,6 +227,9 @@ L’approche analytique appliquée à nos données permet donc d’alimenter dir
 
 
 \subsection{Analyse de la diversification de marque et de modèle}
+
+\subsubsection{Volume de modèles distincts par constructeur}
+
 \begin{figure}[H]
     \centering
     \includegraphics[width=1\textwidth]{Modele_marque.png}
@@ -234,8 +237,17 @@ L’approche analytique appliquée à nos données permet donc d’alimenter dir
     \label{fig:modele-marque}
 \end{figure}
 
-Ce graphique met en évidence les marques proposant le plus grand nombre de modèles différents. \textbf{Chevrolet} et \textbf{Ford} occupent les premières places avec respectivement 63 et 51 modèles, témoignant d’une stratégie de gamme très étendue. D’autres marques comme \textbf{Lexus}, \textbf{Mercedes-Benz} ou \textbf{BMW} offrent également un catalogue riche, mais plus orienté haut de gamme. Ce volume important de modèles suggère une forte présence sur le marché et une capacité à répondre à des profils variés de clients.
+Ce premier graphique dresse un panorama des marques les plus présentes sur le marché en termes de diversité de modèles proposés. On y observe que \textbf{Chevrolet} domine le classement avec 63 modèles, suivi de \textbf{Ford} avec 51 modèles. Ces deux constructeurs américains adoptent une stratégie résolument généraliste, en multipliant les déclinaisons afin de toucher une clientèle très large.
 
+Derrière eux, on retrouve \textbf{Lexus}, \textbf{Mercedes-Benz} et \textbf{BMW}, dont les catalogues sont également étoffés mais plus orientés vers le haut de gamme. Cette diversité traduit une volonté de capter des niches plus spécifiques, en multipliant les combinaisons de finitions, de motorisations et de segments.
+
+Ainsi, ce classement met en lumière deux stratégies différentes : 
+\begin{itemize}
+    \item une logique de volume (Chevrolet, Ford) pour occuper tous les segments du marché,
+    \item une logique de spécialisation (Lexus, BMW, Mercedes-Benz) avec une forte présence dans le premium.
+\end{itemize}
+
+\subsubsection{Répartition des segments pour les principales marques}
 
 \begin{figure}[H]
     \centering
@@ -244,32 +256,19 @@ Ce graphique met en évidence les marques proposant le plus grand nombre de mod�
     \label{fig:marque-nbmodele}
 \end{figure}
 
-\vspace{1em}
-\textbf{Observations principales}
-\begin{itemize}
-    \item \textbf{BMW} et \textbf{Mercedes-Benz} se distinguent par une forte concentration de modèles dans le segment \textit{Luxury}, avec respectivement 70 et 83 modèles.
-    \item \textbf{Mercedes-Benz} est la marque la plus segmentée, avec des modèles présents dans presque toutes les catégories : Crossover, Performance, Factory Tuner, etc.
-    \item \textbf{Chevrolet} et \textbf{Ford} affichent une répartition plus équilibrée entre les segments, bien que moins dense en nombre total.
-    \item \textbf{Lexus} adopte une stratégie proche de Mercedes-Benz, mais dans une échelle plus réduite : forte présence sur le \textit{Luxury}, accompagnée de quelques modèles Performance, Hybrid et Crossover.
-\end{itemize}
-
-\vspace{1em}
-\textbf{Points clés à retenir}
-\begin{itemize}
-    \item Les marques comme \textbf{BMW} et \textbf{Mercedes-Benz} ciblent principalement le haut de gamme avec une concentration marquée sur le segment \textit{Luxury}.
-    \item \textbf{Mercedes-Benz} se distingue par une couverture quasi complète des segments, traduisant une stratégie premium mais aussi étendue.
-    \item \textbf{Ford} et \textbf{Chevrolet} privilégient une stratégie généraliste, en diversifiant leurs modèles sur différents segments.
-    \item \textbf{Lexus} suit un modèle proche de Mercedes-Benz, mais avec un catalogue plus restreint.
-\end{itemize}
-
-\vspace{1em}
-\textbf{Implications pour AutoPredict}
+Ce second graphique affine la lecture précédente en détaillant la composition des catalogues des cinq marques les plus prolifiques. Plusieurs enseignements clés en ressortent :
 
 \begin{itemize}
-    \item Les marques aux offres diversifiées sont pertinentes pour répondre à différents profils clients et alimenter des recommandations plus personnalisées.
-    \item Les marques spécialisées peuvent mieux correspondre à des besoins ciblés ou des utilisateurs ayant des préférences affirmées.
-    \item Ces données enrichissent notre moteur de suggestion, en affinant les correspondances entre segments de véhicules et attentes utilisateurs (prix, performance, consommation, etc.).
+    \item \textbf{Mercedes-Benz} affiche une présence remarquable dans la majorité des segments, en particulier dans le \textit{Luxury} (83 modèles), mais aussi dans le \textit{Performance}, le \textit{Crossover} ou encore le \textit{Factory Tuner}. Ce spectre très large traduit une stratégie ambitieuse, capable de séduire aussi bien les amateurs de confort que de performance.
+    
+    \item \textbf{BMW} suit une trajectoire similaire, avec une prédominance du segment \textit{Luxury} (70 modèles), mais aussi une forte présence dans les segments dynamiques comme le \textit{High-Performance}.
+
+    \item \textbf{Chevrolet} et \textbf{Ford}, bien que moins focalisés sur le haut de gamme, offrent une répartition beaucoup plus homogène entre les différents segments, ce qui illustre leur orientation généraliste. Ils se démarquent notamment par leur présence significative dans les catégories \textit{Crossover}, \textit{Flex Fuel} ou \textit{Hatchback}.
+
+    \item Enfin, \textbf{Lexus} adopte une position intermédiaire : fortement ancrée sur le segment \textit{Luxury} (51 modèles), la marque japonaise complète son offre avec des incursions dans le \textit{Hybrid}, le \textit{Performance} et le \textit{Crossover}, tout en conservant un positionnement qualitatif.
 \end{itemize}
+
+\subsubsection{Diversité de segments et popularité moyenne des marques}
 
 \begin{figure}[H]
     \centering
@@ -278,82 +277,56 @@ Ce graphique met en évidence les marques proposant le plus grand nombre de mod�
     \label{fig:section-pop}
 \end{figure}
 
+Ce dernier graphique aborde la question sous un autre angle : la diversité de l’offre est-elle un levier efficace pour accroître la notoriété ou l’attractivité d’une marque ?
 
-L’analyse de la relation entre le nombre de segments couverts par une marque et sa popularité moyenne révèle une tendance globale : les marques les plus populaires sont souvent celles dont l’offre est la plus diversifiée.
+On remarque que les marques présentes dans peu de segments (entre 1 et 3) affichent généralement une popularité moyenne faible, avec peu de dispersion. Cela traduit une spécialisation qui, bien que cohérente, reste limitée en termes d’audience.
 
-Les marques couvrant peu de segments (1 à 3) restent relativement peu visibles, tandis que celles qui atteignent une couverture large (8 à 9 segments) bénéficient en moyenne d’un niveau de popularité plus élevé. Cette observation suggère qu’une stratégie de diversification permet de mieux répondre à la variété des attentes des clients et d’élargir la portée commerciale d’une marque.
+À partir de 6 segments couverts, on constate une augmentation significative de la popularité moyenne, mais aussi une forte dispersion. Certaines marques diversifiées explosent en popularité, tandis que d’autres, malgré une offre étendue, peinent à s’imposer. Le message est donc nuancé : la diversification est souvent une condition favorable à la visibilité, mais ne garantit pas à elle seule le succès commercial.
 
-Toutefois, cette tendance s’accompagne d’une forte dispersion : certaines marques très diversifiées restent peu populaires, tandis que d’autres, bien que spécialisées, conservent une forte notoriété. Cela montre que la diversité ne suffit pas à elle seule : l’image de marque, le positionnement marketing et la perception client jouent un rôle tout aussi déterminant.
+\subsubsection{Enseignements pour le moteur AutoPredict}
 
-En résumé, la diversité de l’offre constitue un levier important dans la construction d’une marque attractive. Pour AutoPredict, cet indicateur peut être intégré au moteur de recommandation pour ajuster les propositions en fonction de la stratégie produit des constructeurs et du profil de l’utilisateur.
+Ces différentes visualisations apportent des éléments précieux pour l’algorithme de recommandation :
+
+\begin{itemize}
+    \item Une marque très diversifiée comme Mercedes-Benz peut convenir à des profils très variés. Elle est donc intéressante à proposer dans des contextes où les préférences de l’utilisateur ne sont pas encore clairement établies.
+    \item À l’inverse, une marque spécialisée dans le haut de gamme ou les performances (comme BMW ou Lexus) pourra être suggérée à des utilisateurs plus ciblés, ayant exprimé des attentes spécifiques.
+    \item Enfin, la diversité de segments est un bon indicateur de flexibilité commerciale : intégrer cette variable dans AutoPredict permettra d’anticiper le champ des possibles qu’une marque peut offrir à un utilisateur donné.
+\end{itemize}
+
+Ainsi, cette analyse souligne l’importance d’adapter les suggestions non seulement en fonction des caractéristiques techniques des modèles, mais aussi selon la stratégie commerciale des constructeurs.
 
 
 \subsection{Analyse de la dépréciation}
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=1\textwidth]{Annee_prix.png}
-    \caption{Dépréciation moyenne des véhicules pas année}
-    \label{fig:annee-prix}
-\end{figure}
+\subsubsection{ Dépréciation moyenne des véhicules par année}
+\begin{figure}[H] \centering \includegraphics[width=1\textwidth]{Annee_prix.png} \caption{Dépréciation moyenne des véhicules par année} \label{fig:annee-prix} \end{figure}
 
-Cette visualisation offre une vue d’ensemble de l’évolution du prix moyen des véhicules selon leur année de fabrication, sur un marché combinant véhicules neufs et d’occasion.
+Ce graphique représente l’évolution du prix moyen des véhicules en fonction de leur année de fabrication. Il permet d’observer le phénomène de dépréciation sur le long terme, en regroupant aussi bien des véhicules neufs que d’occasion.
 
-On observe une baisse marquée des prix pour les véhicules produits entre 1990 et 1999, souvent vendus sous la barre des 10 000 dollars. Entre 2000 et 2002, une chute brutale est visible, possiblement liée à l’impact de nouvelles normes environnementales pénalisant les véhicules plus anciens.
+\textbf{Analyse détaillée :} \begin{itemize} \item Les modèles antérieurs à l’an 2000 présentent une valeur résiduelle très faible, majoritairement inférieure à 10 000 dollars. Cette tendance s’explique par une accumulation de kilomètres, une usure plus marquée et une inadéquation technologique avec les normes actuelles. \item Une baisse brutale du prix moyen est visible entre les années 2000 et 2002. Cette rupture peut coïncider avec des politiques environnementales ou fiscales incitatives au renouvellement du parc automobile. \item À partir de 2005, on observe une courbe ascendante continue du prix moyen des véhicules, atteignant un pic autour de 2014. Cela reflète probablement une montée en gamme du marché (meilleur équipement, technologies embarquées, électrification partielle...). \end{itemize}
 
-À partir de 2005, la courbe devient plus régulière et progresse graduellement jusqu’à atteindre environ 37 000 dollars en 2017. Cette évolution reflète une montée en gamme progressive des véhicules récents, tant en termes de technologie que de confort ou de positionnement commercial.
+\textbf{Conclusion :}
+La valeur d’un véhicule chute rapidement durant les 10 à 15 premières années après sa sortie d’usine. Passé ce cap, la décote se stabilise à des niveaux très bas. Ces observations confirment qu’il peut être peu rentable, économiquement, d’acheter un véhicule trop ancien — en particulier en l'absence de fiabilité ou de revalorisation possible.
 
-Dans l’ensemble, les données révèlent une dépréciation rapide des véhicules au cours de leurs 10 à 15 premières années. Un véhicule de plus de 15 ans perd une part importante de sa valeur, ce qui limite sa rentabilité en revente.
+\subsubsection{Dépréciation par style de véhicule}
+\begin{figure}[H] \centering \includegraphics[width=1\textwidth]{année_pris_dep.png} \caption{Dépréciation par style de véhicule} \label{fig:annee-pris-dep} \end{figure}
 
-\vspace{1em}
-Cette première analyse met en lumière la tendance générale du marché. Elle soulève toutefois une interrogation essentielle : tous les styles de véhicules suivent-ils cette même trajectoire de dépréciation ? C’est à cette question que nous répondrons dans la section suivante.
+Ce graphique explore la manière dont le style de carrosserie influence le prix moyen d’un véhicule au fil du temps. Chaque courbe correspond à un type de style (SUV, coupé, van, etc.).
 
+\textbf{Constats notables :} \begin{itemize} \item Les \textit{SUV 4 portes}, \textit{Convertibles} et \textit{Crew Cab Pickups} conservent une valeur relativement stable, souvent au-dessus de 50 000 dollars. Cette rétention de valeur témoigne de leur attractivité constante sur le marché, même en occasion. \item À l’inverse, les \textit{Cargo Vans}, \textit{2dr Hatchbacks} ou encore les \textit{Sedans} restent globalement en dessous de 20 000 dollars, traduisant une moindre demande ou un usage plus utilitaire. \item Le cas particulier des \textit{Convertible SUV} est à souligner : malgré leur rareté, ces modèles enregistrent des pics de prix dépassant 100 000 dollars. Leur rareté et leur image de niche haut de gamme expliquent cette valorisation atypique. \end{itemize}
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=1\textwidth]{année_pris_dep.png}
-    \caption{Dépréciation par style de véhicule}
-    \label{fig:annee-pris-dep}  
-\end{figure}
+\textbf{Interprétation :}
+Les styles qui véhiculent un imaginaire de plaisir (convertible, SUV, pickup) ou de statut conservent mieux leur prix que ceux purement fonctionnels. La perception sociale et l'usage projeté semblent donc peser lourdement dans la dépréciation d’un véhicule.
 
-Cette analyse explore l’impact du style de carrosserie sur la dépréciation des véhicules au fil du temps. Chaque courbe du graphique représente un type de véhicule, avec en ordonnée le prix moyen par année de mise en circulation.
+\subsubsection{Dépréciation par catégorie marketing}
+\begin{figure}[H] \centering \includegraphics[width=1\textwidth]{annee_prix_cat.png} \caption{Dépréciation par catégorie marketing} \label{fig:annee-prix-cat} \end{figure}
 
-\vspace{0.5em}
-\textbf{Observations notables :}
-\begin{itemize}
-    \item Les SUV 4 portes, Convertibles et Crew Cab Pickups conservent des prix élevés, même plusieurs années après leur sortie, ce qui reflète une forte demande et une bonne rétention de valeur.
-    \item À l’inverse, les Cargo Vans, Hatchbacks 2 portes et Sedans affichent des prix plus faibles, même pour des modèles récents, traduisant une faible valorisation sur le marché secondaire.
-    \item Les Convertible SUV, bien que rares, se distinguent par une valeur très élevée, probablement liée à leur rareté et à leur positionnement haut de gamme.
-\end{itemize}
+Ici, le graphique fait le lien entre la catégorie marketing d’un véhicule (Luxury, Hybrid, Diesel, etc.) et l’évolution de sa valeur au fil du temps.
 
-\vspace{0.5em}
-\textbf{Interprétation générale :}
-\begin{itemize}
-    \item Les styles utilitaires ou économiques ont tendance à perdre rapidement de la valeur.
-    \item Les styles plaisir ou valorisants (SUV, convertible, pickup) maintiennent mieux leur prix avec le temps.
-    \item Passé 15 ans, la plupart des véhicules, quel que soit leur style, tendent vers une valeur moyenne d’environ 10 000 dollars.
-\end{itemize}
+\textbf{Tendances principales :} \begin{itemize} \item Les véhicules classés \textit{Exotic}, \textit{High-Performance} ou \textit{Luxury} dominent en termes de prix moyen. Ces segments dépassent largement les 60 000 dollars, et certains modèles de niche (ex : Exotic) peuvent frôler ou dépasser les 500 000 dollars. \item Les véhicules à vocation économique ou utilitaire comme les \textit{Flex Fuel}, \textit{Diesel} ou \textit{Hatchback} restent dans une fourchette basse (en dessous de 30 000 dollars), avec une décroissance régulière. \item Le segment \textit{Crossover} se démarque : il affiche une très bonne stabilité, avec des prix moyens compétitifs et peu de chute marquée. Sa polyvalence et sa modernité en font un style très recherché. \end{itemize}
 
-\vspace{1em}
-Le style du véhicule, en tant que facteur esthétique et fonctionnel, influence directement sa perception et sa valeur résiduelle. Toutefois, cette dimension visuelle s’inscrit aussi dans une stratégie de positionnement marketing, que nous approfondissons dans la prochaine section à travers l’analyse des catégories de marché.
-
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=1\textwidth]{annee_prix_cat.png}
-    \caption{Dépréciation par catégorie de marché}
-    \label{fig:annee-prix-cat}
-\end{figure}
-Cette analyse s’intéresse à la relation entre le positionnement commercial des véhicules (catégorie marketing) et leur maintien de valeur au fil du temps. Les catégories correspondent à des segments tels que \textit{Luxury}, \textit{Hybrid}, \textit{Diesel}, etc., qui traduisent une stratégie de marque ciblée.
-
-\vspace{0.5em}
-\textbf{Observations clés :}
-\begin{itemize}
-    \item Les segments \textit{Exotic}, \textit{High-Performance} et \textit{Luxury} dominent largement, avec des prix moyens dépassant fréquemment les 60 000 dollars, y compris pour des véhicules de 5 à 10 ans.
-    \item Les catégories comme \textit{Diesel}, \textit{Hatchback} ou \textit{Flex Fuel} restent bien en dessous de la barre des 30 000 dollars. Ces modèles économiques ou écologiques subissent une dépréciation plus rapide.
-    \item Le segment \textit{Crossover} montre une très bonne tenue de valeur, en combinant confort, modernité et polyvalence, ce qui en fait un choix populaire et stratégique.
-\end{itemize}
-
+\textbf{Ce que cela révèle :}
+La dépréciation est fortement corrélée à la manière dont un véhicule est positionné. Plus l’image est prestigieuse, rare ou technologique, plus la valeur est préservée. À l’inverse, un véhicule perçu comme « utilitaire » est souvent plus sujet à l’obsolescence perçue.
 \vspace{0.5em}
 \textbf{Interprétation globale :}
 \begin{itemize}
@@ -397,7 +370,7 @@ Avant l'entraînement du modèle, un travail de préparation minutieux a été r
     \includegraphics[width=1\textwidth]{correlation_matrix.png}
     \caption{Matrice de corrélation}
     \label{fig:correlation-matrix}
-
+\end{figure}
 \subsection{Champs utilisés pour le modèle}
 Les champs suivants ont été utilisés pour le modèle : \textit{make, model, year, fuel\_type, hp, transmission, cylinders, drive, size, style}.
 
@@ -532,4 +505,5 @@ Les résultats sont affichés dans le frontend sous cette forme :
     \label{fig:resultats}
 \end{figure}
 Le prix estimé est affiché en dollars puisqu'il s'agit d'un dataset américain. Nous avons également affiché le taux RMSE en pourcentage pour donner une idée de la précision du modèle. Ainsi que les données envoyées à l'API pour que l'utilisateur puisse vérifier les données qu'il a saisies.
+
 \end{document}
