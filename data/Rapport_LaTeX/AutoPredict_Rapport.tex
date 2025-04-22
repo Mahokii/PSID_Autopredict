@@ -432,7 +432,9 @@ Pour le modèle Random Forest (RF), nous avons utilisé le \textit{label encodin
 
 \subsubsection{Validation croisée}
 
-Nous avons utilisé la méthode de validation croisée K-Fold pour évaluer les performances des modèles. Cette approche permet de garantir une évaluation robuste en divisant les données en plusieurs sous-ensembles et en entraînant le modèle sur différentes combinaisons de ces sous-ensembles. Nous avons effectué une validation croisée avec 5 folds à chaque fois. Aucun des modèles n'a montré de disparité significative dans les résultats, ce qui indique qu'il n'y a pas d'overfitting.
+Nous avons utilisé la méthode de validation croisée K-Fold pour évaluer les performances des modèles. Cette approche permet de garantir une évaluation robuste en divisant les données en plusieurs sous-ensembles et en entraînant le modèle sur différentes combinaisons de ces sous-ensembles. Nous avons effectué une validation croisée avec 5 folds à chaque fois. Aucun des modèles n'a montré de disparité significative dans les résultats, ce qui indique qu'il n'y a pas d'overfitting. Cela aide à prévenir le surapprentissage et à assurer que le modèle ne
+se contente pas de mémoriser les données d'entraînement, mais apprend plutôt à identifier
+et à généraliser à partir de patterns sous-jacents.
 
 
 \subsubsection{K-Nearest Neighbors (KNN)}
