@@ -364,4 +364,170 @@ Cette analyse s’intéresse à la relation entre le positionnement commercial d
 \vspace{1em}
 Ces résultats confirment que la perception du véhicule joue un rôle central dans sa valeur résiduelle. Intégrer cette information dans le moteur de recommandation d'AutoPredict permet d’adapter les suggestions aux attentes des utilisateurs, en tenant compte de leur sensibilité au prestige, à la performance ou à l’économie.
 
+\chapter{Partie Machine Learning}
+
+\thispagestyle{plain}
+\pagestyle{plain}
+
+\section{Objectif et Intégration}
+
+La composante \textit{Machine Learning} du projet \textbf{AutoPredict} a pour objectif de fournir une fonctionnalité intelligente essentielle : 
+\begin{itemize}
+    \item \textbf{L'estimation du prix} de véhicules d'occasion en fonction de leurs caractéristiques techniques.
+\end{itemize}
+
+Cette estimation s'adresse principalement à un utilisateur se plaçant dans la peau d’un vendeur souhaitant connaître la valeur de revente potentielle de son véhicule. L’intégration de cette composante permet ainsi de proposer un service à forte valeur ajoutée, en facilitant la prise de décision pour les particuliers ou les professionnels.
+Le code est disponible dans le notebooks \texttt{AutoPredict\_ML.ipynb}. 
+
+\section{Préparation des Données}
+
+\subsection{Nettoyage}
+
+Avant l'entraînement du modèle, un travail de préparation minutieux a été réalisé, avec des étapes spécifiques par rapport à l'analyse des données :
+\begin{itemize}
+    \item \textbf{Nettoyage des doublons et des valeurs manquantes}. Nous avons décidé de supprimer les colonnes présentant un nombre élevé de valeurs manquantes pour éviter la suppression d'un trop grand nombre de lignes. Par exemple, la colonne "market" comportait 3376 valeurs manquantes sur un total de 11914 lignes et a donc été supprimée. La colonne "popularité" a également été retirée car elle n'était pas pertinente pour la suite.
+    \item \textbf{Standardisation des noms de colonnes} pour faciliter leur manipulation, certains noms n'étant pas suffisamment explicites.
+    \item \textbf{Regroupement de plusieurs catégories en une}. Dans la colonne du type de carburant, nous avons regroupé les nombreuses catégories en six grandes catégories (essence, flex fuel, électrique, diesel, gaz naturel et autre). Cela sera particulièrement utile pour l'interface utilisateur (UI).
+    \item \textbf{Suppression des outliers}. Bien que les outliers soient nécessaires pour l'analyse des données, ils peuvent nuire à l'entraînement du modèle. Nous avons donc choisi de les supprimer pour obtenir un modèle plus précis. Les véhicules présentant des écarts de prix et de puissance trop importants ont été écartés.
+    \item \textbf{Suppression des colonnes non pertinentes pour le prix}. Pour éviter d'entraîner le modèle sur des colonnes inutiles, nous avons supprimé certaines d'entre elles. Nous avons utilisé une matrice de corrélation pour les variables numériques, ainsi qu'une analyse ANOVA et un test du Khi-deux pour les variables catégorielles. Cela nous a permis d'écarter des variables numériques telles que le nombre de portes, la consommation et la consommation urbaine/route. Toutes les variables catégorielles semblent avoir un impact significatif et ont donc été conservées.
+\end{itemize}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{correlation_matrix.png}
+    \caption{Matrice de corrélation}
+    \label{fig:correlation-matrix}
+
+\subsection{Champs utilisés pour le modèle}
+Les champs suivants ont été utilisés pour le modèle : \textit{make, model, year, fuel\_type, hp, transmission, cylinders, drive, size, style}.
+
+
+\section{Modèle et Entraînement}
+
+\subsection{Algorithmes explorés}
+
+Dans une démarche d'exploration comparative, trois approches ont été testées pour estimer le prix d’un véhicule à partir de ses caractéristiques techniques : \textbf{KNN}, \textbf{RNN} et \textbf{Random Forest}. Chacune de ces approches présente des avantages spécifiques :
+
+\begin{itemize}
+    \item \textbf{K-Nearest Neighbors (KNN)} : Bien que les données soient étiquetées, nous avons souhaité tester ce modèle car il permet de capturer des relations locales entre les caractéristiques des véhicules. Cependant, il peut être sensible à la dimensionnalité des données et nécessite une optimisation du paramètre \( k \). Pour cela, nous avons implémenté une recherche exhaustive similaire à une Grid Search, où nous avons testé chaque valeur de \( k \) dans une plage allant de 1 à 30. Cette approche nous a permis de déterminer la valeur optimale de \( k \) qui minimise l'erreur quadratique moyenne (RMSE).
+
+    \item \textbf{Random Forest (RF)} : Ce modèle nous a semblé immédiatement pertinent en raison de sa capacité à gérer des données de grande dimension et à capturer des interactions complexes entre les variables. De plus, il est robuste face aux valeurs aberrantes et offre une bonne interprétabilité grâce à l'importance des variables.
+
+    \item \textbf{Recurrent Neural Network (RNN)} : Les RNN sont particulièrement adaptés pour traiter des séquences de données, ce qui peut être intéressant si l'on considère l'historique des prix ou des caractéristiques temporelles. Cependant, leur entraînement peut être plus complexe et nécessite des ressources computationnelles importantes.
+\end{itemize}
+
+
+
+\subsection{Encodage}
+
+\subsubsection{Target Encoding}
+
+Pour les modèles KNN et RNN, nous avons opté pour le \textit{target encoding} sur la variable prix. Cette méthode s'est avérée la plus efficace pour ces algorithmes, car elle permet de transformer les variables catégorielles en valeurs numériques tout en préservant l'information sur la cible.
+
+\subsubsection{Label Encoding}
+
+Pour le modèle Random Forest (RF), nous avons utilisé le \textit{label encoding}, qui s'est révélé être le plus performant. Cette technique assigne une valeur numérique unique à chaque catégorie, ce qui est bien adapté aux arbres de décision qui composent la forêt aléatoire.
+
+\subsection{Évaluation et Résultats}
+
+\subsubsection{Validation croisée}
+
+Nous avons utilisé la méthode de validation croisée K-Fold pour évaluer les performances des modèles. Cette approche permet de garantir une évaluation robuste en divisant les données en plusieurs sous-ensembles et en entraînant le modèle sur différentes combinaisons de ces sous-ensembles. Nous avons effectué une validation croisée avec 5 folds à chaque fois. Aucun des modèles n'a montré de disparité significative dans les résultats, ce qui indique qu'il n'y a pas d'overfitting.
+
+
+\subsubsection{K-Nearest Neighbors (KNN)}
+
+\begin{itemize}
+    \item \textbf{Erreur quadratique moyenne (RMSE)} : \$3575.05
+    \item \textbf{Erreur quadratique moyenne (RMSE) en pourcentage} : 12.28\%
+    \item \textbf{Score \( R^2 \)} : 0.9463
+\end{itemize}
+
+\subsubsection{Random Forest (RF)}
+
+\begin{itemize}
+    \item \textbf{Erreur quadratique moyenne (RMSE)} : \$3237.02
+    \item \textbf{Erreur quadratique moyenne (RMSE) en pourcentage} : 11.12\%
+    \item \textbf{Score \( R^2 \)} : 0.9560
+\end{itemize}
+
+\subsubsection{Réseau de Neurones (RNN)}
+
+\begin{itemize}
+    \item \textbf{Erreur quadratique moyenne (RMSE)} : \$4055.24
+    \item \textbf{Erreur quadratique moyenne (RMSE) en pourcentage} : 13.93\%
+    \item \textbf{Score \( R^2 \)} : 0.9310
+\end{itemize}
+
+\subsection{Modèle choisi}
+
+Nous avons opté pour le modèle \textbf{Random Forest (RF)} avec \textit{label encoding}. Cette décision repose sur plusieurs justifications :
+
+\begin{itemize}
+    \item \textbf{Performance supérieure} : Le modèle RF a démontré une meilleure performance en termes d'erreur quadratique moyenne (RMSE) et de score \( R^2 \) par rapport aux autres modèles testés.
+    \item \textbf{Robustesse} : Les forêts aléatoires sont robustes face aux valeurs aberrantes et peuvent gérer efficacement les interactions complexes entre les variables.
+    \item \textbf{Interprétabilité} : Le RF permet une meilleure interprétabilité des résultats grâce à l'importance des variables, ce qui est un atout pour comprendre les facteurs influençant le prix des véhicules.
+\end{itemize}
+
+Ces raisons combinées font du Random Forest le choix optimal pour notre projet.
+
+
+
+\section{Interaction avec le Frontend}
+
+\subsection{Variables saisies par l'utilisateur}
+
+Nous avons cherché à rendre la saisie des données par l'utilisateur la moins contraignante possible. Pour ce faire, nous avons consulté plusieurs utilisateurs potentiels afin qu'ils nous communiquent les caractéristiques qu'ils jugent les plus importantes lors de l'achat d'une voiture. Les caractéristiques retenues sont les suivantes :
+\begin{itemize}
+    \item \textit{make} (marque)
+    \item \textit{model} (modèle)
+    \item \textit{year} (année)
+    \item \textit{fuel\_type} (type de carburant)
+    \item \textit{hp} (puissance en chevaux)
+    \item \textit{transmission} (type de transmission)
+\end{itemize}
+
+Ces caractéristiques ont également été identifiées comme significatives dans nos analyses de corrélation, d'ANOVA et de Khi-deux. Nous les avons donc privilégiées dans l'interface utilisateur (UI). Cependant, pour ne pas compromettre les performances du modèle en négligeant les autres variables, nous avons procédé à l'inférence des variables manquantes.
+
+\subsection{Inférence des variables manquantes}
+
+Nous avons mis en place un système d'inférence pour estimer les valeurs des variables manquantes, telles que \textit{style}, \textit{drive}, \textit{cylinders} et \textit{size}. Ce système utilise des filtres successifs basés sur les caractéristiques saisies par l'utilisateur :
+\begin{enumerate}
+    \item Année du véhicule
+    \item Puissance en chevaux (\textit{hp})
+    \item Marque (\textit{make})
+    \item Type de carburant (\textit{fuel\_type})
+    \item Type de transmission (\textit{transmission})
+\end{enumerate}
+
+Pour les variables numériques, nous avons utilisé la moyenne des valeurs filtrées. Pour les variables catégorielles, nous avons retenu la catégorie la plus représentée après application des filtres. Si aucun élément n'est retourné par les filtres, la variable sera encodée avec la valeur \(-1\).
+
+
+\subsection{Tolérance à la panne}
+
+\subsection{Tolérance aux erreurs de saisie}
+
+Pour gérer les cas où l'utilisateur fait des erreurs typographiques, comme écrire "5 series" au lieu de "serie 5" ou omettre un "s", nous avons mis en place un mécanisme de correspondance approximative. Ce mécanisme fonctionne comme suit :
+
+\begin{enumerate}
+    \item \textbf{Normalisation du texte} : Les entrées de l'utilisateur et les valeurs connues sont normalisées pour uniformiser leur format. Cela inclut la conversion en minuscules, la suppression des accents et des espaces superflus.
+    \item \textbf{Recherche de correspondances approximatives} : Nous utilisons la bibliothèque \texttt{difflib} pour trouver des correspondances approximatives entre le texte normalisé de l'utilisateur et les valeurs connues. Si la similarité entre deux textes dépasse un seuil de 0.6, ils sont considérés comme correspondants.
+    \item \textbf{Sélection de la meilleure correspondance} : Si une correspondance est trouvée, la valeur connue la plus proche est sélectionnée. Sinon, un message d'avertissement est affiché et la valeur est encodée comme \(-1\).
+    \item \textbf{Encodage des valeurs} : Les valeurs saisies par l'utilisateur sont encodées en utilisant les encodeurs spécifiés. Si une valeur ne correspond pas exactement à une valeur connue, la correspondance approximative est utilisée.
+    \item \textbf{Normalisation des valeurs numériques} : Les valeurs numériques sont normalisées en utilisant les valeurs minimales et maximales spécifiées dans les normalisateurs.
+\end{enumerate}
+
+Ce mécanisme permet de rendre le système plus tolérant aux erreurs de saisie, améliorant ainsi l'expérience utilisateur.
+
+\subsection{Affichage des résultats}
+
+Les résultats sont affichés dans le frontend sous cette forme : 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{resultats.png}
+    \caption{Affichage des résultats}
+    \label{fig:resultats}
+\end{figure}
+Le prix estimé est affiché en dollars puisqu'il s'agit d'un dataset américain. Nous avons également affiché le taux RMSE en pourcentage pour donner une idée de la précision du modèle. Ainsi que les données envoyées à l'API pour que l'utilisateur puisse vérifier les données qu'il a saisies.
 \end{document}
