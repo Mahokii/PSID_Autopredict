@@ -25,10 +25,12 @@ jobs:
       - name: Install dependencies
         run: |
           python -m venv venv
-          . venv/bin/activate
+          source venv/bin/activate
+          pip install --upgrade pip
           pip install -r backend/requirements.txt
 
       - name: Run tests
         run: |
-          . venv/bin/activate
+          source venv/bin/activate
+          pip show pytest  # Vérifie si pytest est installé
           pytest
