@@ -1,31 +1,60 @@
 \babel@toc {french}{}\relax 
-\contentsline {chapter}{\numberline {1}Présentation de AutoPredict}{2}{chapter.1}%
-\contentsline {section}{\numberline {1.1}Problématique}{2}{section.1.1}%
-\contentsline {section}{\numberline {1.2}Solution}{2}{section.1.2}%
-\contentsline {chapter}{\numberline {2}Caractéristiques Principales}{3}{chapter.2}%
-\contentsline {section}{\numberline {2.1}Interface Conviviale}{3}{section.2.1}%
-\contentsline {section}{\numberline {2.2}Sources Fiables}{3}{section.2.2}%
-\contentsline {chapter}{\numberline {3}Architecture métier}{4}{chapter.3}%
-\contentsline {section}{\numberline {3.1}Frontend}{4}{section.3.1}%
-\contentsline {section}{\numberline {3.2}Backend}{4}{section.3.2}%
-\contentsline {section}{\numberline {3.3}Base de données}{4}{section.3.3}%
-\contentsline {chapter}{\numberline {4}Architecture distribuée}{5}{chapter.4}%
-\contentsline {section}{\numberline {4.1}Application Hosting}{5}{section.4.1}%
-\contentsline {section}{\numberline {4.2}Database Hosting}{5}{section.4.2}%
-\contentsline {chapter}{\numberline {5}Pratiques de Collaboration et de DevOps}{6}{chapter.5}%
-\contentsline {section}{\numberline {5.1}Project Management}{6}{section.5.1}%
-\contentsline {section}{\numberline {5.2}Versionnement}{6}{section.5.2}%
-\contentsline {section}{\numberline {5.3}Intégration Continue et Déploiement Continu}{6}{section.5.3}%
-\contentsline {section}{\numberline {5.4}Maintenabilité du code}{6}{section.5.4}%
-\contentsline {section}{\numberline {5.5}Qualité du code}{6}{section.5.5}%
-\contentsline {chapter}{\numberline {6}Partie Data Analytique}{7}{chapter.6}%
-\contentsline {section}{\numberline {6.1}Analyse de données}{7}{section.6.1}%
-\contentsline {subsection}{\numberline {6.1.1}Préparation et nettoyage des données}{7}{subsection.6.1.1}%
-\contentsline {subsection}{\numberline {6.1.2}Présentation des graphiques et interprétation}{7}{subsection.6.1.2}%
-\contentsline {paragraph}{1. Répartition des types de transmission selon les quantiles de prix}{7}{section*.2}%
-\contentsline {paragraph}{2. Répartition des styles de véhicules selon le type de transmission}{8}{section*.3}%
-\contentsline {paragraph}{3. Consommation moyenne selon puissance moteur et cylindres}{9}{section*.4}%
-\contentsline {paragraph}{4. Prix moyen par catégorie de véhicule et puissance moteur}{10}{section*.5}%
-\contentsline {paragraph}{5. Profil d’achat et recommandations commerciales}{11}{section*.6}%
-\contentsline {subsection}{\numberline {6.1.3}Analyse de la diversification de marque et de modèle}{12}{subsection.6.1.3}%
-\contentsline {subsection}{\numberline {6.1.4}Analyse de la dépréciation}{14}{subsection.6.1.4}%
+\contentsline {chapter}{\numberline {1}Présentation de AutoPredict}{3}{chapter.1}%
+\contentsline {section}{\numberline {1.1}Problématique}{3}{section.1.1}%
+\contentsline {section}{\numberline {1.2}Solution}{3}{section.1.2}%
+\contentsline {chapter}{\numberline {2}Caractéristiques Principales}{4}{chapter.2}%
+\contentsline {section}{\numberline {2.1}Interface Conviviale}{4}{section.2.1}%
+\contentsline {section}{\numberline {2.2}Sources Fiables}{4}{section.2.2}%
+\contentsline {chapter}{\numberline {3}Architecture métier}{5}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Frontend}{5}{section.3.1}%
+\contentsline {section}{\numberline {3.2}Backend}{5}{section.3.2}%
+\contentsline {section}{\numberline {3.3}Base de données}{5}{section.3.3}%
+\contentsline {chapter}{\numberline {4}Architecture distribuée}{6}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Application Hosting}{6}{section.4.1}%
+\contentsline {section}{\numberline {4.2}Database Hosting}{6}{section.4.2}%
+\contentsline {chapter}{\numberline {5}Pratiques de Collaboration et de DevOps}{7}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Project Management}{7}{section.5.1}%
+\contentsline {section}{\numberline {5.2}Versionnement}{7}{section.5.2}%
+\contentsline {section}{\numberline {5.3}Intégration Continue et Déploiement Continu}{7}{section.5.3}%
+\contentsline {section}{\numberline {5.4}Maintenabilité du code}{7}{section.5.4}%
+\contentsline {section}{\numberline {5.5}Qualité du code}{7}{section.5.5}%
+\contentsline {chapter}{\numberline {6}Partie Data Analytique}{8}{chapter.6}%
+\contentsline {section}{\numberline {6.1}Analyse de données}{8}{section.6.1}%
+\contentsline {subsection}{\numberline {6.1.1}Préparation et nettoyage des données}{8}{subsection.6.1.1}%
+\contentsline {subsection}{\numberline {6.1.2}Présentation des graphiques et interprétation}{8}{subsection.6.1.2}%
+\contentsline {paragraph}{1. Répartition des types de transmission selon les quantiles de prix}{8}{section*.2}%
+\contentsline {paragraph}{2. Répartition des styles de véhicules selon le type de transmission}{9}{section*.3}%
+\contentsline {paragraph}{3. Consommation moyenne selon puissance moteur et cylindres}{10}{section*.4}%
+\contentsline {paragraph}{4. Prix moyen par catégorie de véhicule et puissance moteur}{11}{section*.5}%
+\contentsline {paragraph}{5. Profil d’achat et recommandations commerciales}{12}{section*.6}%
+\contentsline {subsection}{\numberline {6.1.3}Analyse de la diversification de marque et de modèle}{13}{subsection.6.1.3}%
+\contentsline {subsubsection}{Volume de modèles distincts par constructeur}{13}{section*.7}%
+\contentsline {subsubsection}{Répartition des segments pour les principales marques}{14}{section*.8}%
+\contentsline {subsubsection}{Diversité de segments et popularité moyenne des marques}{15}{section*.9}%
+\contentsline {subsubsection}{Enseignements pour le moteur AutoPredict}{15}{section*.10}%
+\contentsline {subsection}{\numberline {6.1.4}Analyse de la dépréciation}{16}{subsection.6.1.4}%
+\contentsline {subsubsection}{ Dépréciation moyenne des véhicules par année}{16}{section*.11}%
+\contentsline {subsubsection}{Dépréciation par style de véhicule}{17}{section*.12}%
+\contentsline {subsubsection}{Dépréciation par catégorie marketing}{18}{section*.13}%
+\contentsline {chapter}{\numberline {7}Partie Machine Learning}{20}{chapter.7}%
+\contentsline {section}{\numberline {7.1}Objectif et Intégration}{20}{section.7.1}%
+\contentsline {section}{\numberline {7.2}Préparation des Données}{20}{section.7.2}%
+\contentsline {subsection}{\numberline {7.2.1}Nettoyage}{20}{subsection.7.2.1}%
+\contentsline {subsection}{\numberline {7.2.2}Champs utilisés pour le modèle}{22}{subsection.7.2.2}%
+\contentsline {section}{\numberline {7.3}Modèle et Entraînement}{22}{section.7.3}%
+\contentsline {subsection}{\numberline {7.3.1}Algorithmes explorés}{22}{subsection.7.3.1}%
+\contentsline {subsection}{\numberline {7.3.2}Encodage}{22}{subsection.7.3.2}%
+\contentsline {subsubsection}{Target Encoding}{22}{section*.14}%
+\contentsline {subsubsection}{Label Encoding}{22}{section*.15}%
+\contentsline {subsection}{\numberline {7.3.3}Évaluation et Résultats}{23}{subsection.7.3.3}%
+\contentsline {subsubsection}{Validation croisée}{23}{section*.16}%
+\contentsline {subsubsection}{K-Nearest Neighbors (KNN)}{23}{section*.17}%
+\contentsline {subsubsection}{Random Forest (RF)}{23}{section*.18}%
+\contentsline {subsubsection}{Réseau de Neurones (RNN)}{23}{section*.19}%
+\contentsline {subsection}{\numberline {7.3.4}Modèle choisi}{23}{subsection.7.3.4}%
+\contentsline {section}{\numberline {7.4}Interaction avec le Frontend}{24}{section.7.4}%
+\contentsline {subsection}{\numberline {7.4.1}Variables saisies par l'utilisateur}{24}{subsection.7.4.1}%
+\contentsline {subsection}{\numberline {7.4.2}Inférence des variables manquantes}{24}{subsection.7.4.2}%
+\contentsline {subsection}{\numberline {7.4.3}Tolérance à la panne}{24}{subsection.7.4.3}%
+\contentsline {subsection}{\numberline {7.4.4}Tolérance aux erreurs de saisie}{24}{subsection.7.4.4}%
+\contentsline {subsection}{\numberline {7.4.5}Affichage des résultats}{25}{subsection.7.4.5}%
