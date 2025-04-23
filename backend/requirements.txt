@@ -10,3 +10,4 @@ scikit-learn
 numpy
 joblib
 requests
+python-dotenv

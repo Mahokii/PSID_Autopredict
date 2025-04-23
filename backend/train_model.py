@@ -1,3 +1,5 @@
+import os
+from dotenv import load_dotenv
 import pandas as pd
 import joblib
 from pymongo import MongoClient
@@ -10,8 +12,12 @@ import numpy as np
 
 from features import CATEGORICAL_COLS, NUMERICAL_COLS, FEATURES_TO_KEEP
 
+load_dotenv()
+
 # --- Connexion MongoDB ---
-client = MongoClient("mongodb://admin:admin@mongodb:27017/")
+mongo_user = os.getenv("MONGO_USER", "admin")
+mongo_password = os.getenv("MONGO_PASSWORD", "admin")
+client = MongoClient(f"mongodb://{mongo_user}:{mongo_password}@mongodb:27017/")
 db = client["voitureDB"]
 collection = db["voitures"]
 

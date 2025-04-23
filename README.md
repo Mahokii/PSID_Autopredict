@@ -1,106 +1,163 @@
-# Machine Learning Project
+# PSID Autopredict
 
-## Description
-Ce projet est une application web basée sur un **backend FastAPI** et une **base de données PostgreSQL**, ainsi qu'un **frontend React avec Bootstrap**. L'objectif est de permettre l'interaction avec des données NoSQL stockées dans PostgreSQL et d'afficher les résultats d'analyses de Machine Learning.
+**PSID Autopredict** est une application full-stack conteneurisée permettant de prédire les prix des véhicules à partir de données. Ce projet combine un backend d’API, un frontend interactif, un modèle de Machine Learning et une base de données MongoDB.
 
 ---
 
-## 📂 Structure du projet
-```plaintext
-machine-learning-project/
-│── backend/                  # Backend FastAPI + PostgreSQL
-│   ├── app/
-│   │   ├── main.py           # Point d'entrée de l'API
-│   │   ├── models.py         # Modèles SQLAlchemy
-│   │   ├── routes.py         # Routes API
-│   │   ├── services.py       # Logique métier
-│   │   ├── database.py       # Connexion PostgreSQL
-│   │   ├── ml/               # Scripts ML (prétraitement, entraînement...)
-│   ├── requirements.txt      # Dépendances Python
-│   ├── Dockerfile            # Dockerisation du backend
-│
-│── frontend/                 # Frontend React + Bootstrap
+## 🚀 Fonctionnalités principales
+
+- **Importation de données** : Importation d'un dataset sur MongoDB contenant des informations sur les véhicules.
+- **Nettoyage des données** : Suppression des doublons et transformation des données pour l'entraînement.
+- **Entraînement du modèle** : Utilisation d'un modèle `RandomForestRegressor` pour prédire les prix.
+- **API REST** : Fournie via FastAPI pour interagir avec le modèle et les données.
+- **Interface utilisateur** : Dashboard React pour visualiser les données et effectuer des prédictions.
+- **Base de données MongoDB** : Stockage des données nettoyées et des résultats.
+
+---
+
+## 🛠️ Stack technique
+
+### Backend
+- **Langage** : Python 3.9+
+- **Framework** : FastAPI
+- **Librairies principales** :
+  - `pandas`, `scikit-learn`, `joblib` (Machine Learning)
+  - `pymongo` (MongoDB)
+  - `uvicorn` (Serveur ASGI)
+
+### Frontend
+- **Langage** : JavaScript (ES6+)
+- **Framework** : React
+- **UI** : Material-UI (MUI), Bootstrap
+- **Visualisation** : Plotly.js
+
+### Conteneurisation
+- **Orchestration** : Docker & Docker Compose
+- **Base de données** : MongoDB avec Mongo Express pour l'administration
+
+---
+
+## 📁 Arborescence du projet
+
+```
+PSID_Autopredict/
+├── backend/
+│   ├── app/                  # API FastAPI
+│   │   ├── api/
+│   │   │   ├── predict.py    # Routes pour les prédictions
+│   │   │   └── data.py       # Routes pour la gestion des données
+│   │   ├── core/
+│   │   │   ├── logic.py      # Logique métier pour les prédictions
+│   │   │   └── config.py     # Configuration de l'application
+│   │   ├── utils/
+│   │   │   ├── loader.py     # Chargement du modèle et des encodeurs
+│   │   │   └── helpers.py    # Fonctions utilitaires
+│   │   └── main.py           # Point d'entrée de l'API
+│   ├── import_csv_to_mongo.py
+│   ├── train_model.py
+│   ├── start.sh
+│   └── requirements.txt
+├── frontend/
 │   ├── src/
-│   │   ├── components/       # Composants réutilisables
-│   │   ├── pages/            # Pages principales (Home, Dashboard...)
-│   │   ├── services/         # Appels API
-│   │   ├── App.js            # Composant principal
-│   │   ├── index.js          # Point d'entrée React
-│   ├── package.json          # Dépendances React
-│   ├── Dockerfile            # Dockerisation du frontend
-│
-│── docker-compose.yml        # Orchestration des conteneurs
-│── README.md                 # Documentation du projet
+│   │   ├── components/
+│   │   │   ├── Header.js     # Composant pour l'en-tête
+│   │   │   ├── Footer.js     # Composant pour le pied de page
+│   │   │   └── Dashboard.js  # Composant principal pour le tableau de bord
+│   │   ├── pages/
+│   │   │   ├── Home.js       # Page d'accueil
+│   │   │   └── Predict.js    # Page pour effectuer des prédictions
+│   │   ├── App.js            # Composant principal React
+│   │   ├── index.js          # Point d'entrée de l'application React
+│   │   └── styles.css        # Fichier de styles CSS
+│   ├── package.json
+│   └── README.md             # Documentation du frontend
+├── models/                   # Modèle ML sauvegardé
+│   └── random_forest_model.joblib
+├── voiture.csv               # Données d'entrée
+├── docker-compose.yml
+├── Dockerfile
+└── .env                      # Variables d'environnement
+
 ```
 
 ---
 
-## 🚀 Installation & Exécution
+## ⚙️ Installation et lancement
 
-### **1️⃣ Cloner le dépôt**
-```bash
-git clone https://github.com/ton-utilisateur/machine-learning-project.git
-cd machine-learning-project
-```
+### Prérequis
+- [Docker](https://www.docker.com/) installé sur votre machine.
+- [Python 3.9+](https://www.python.org/) (si vous exécutez le backend localement).
 
-### **2️⃣ Lancer le backend avec PostgreSQL**
-Assurez-vous que **Docker** est installé, puis exécutez :
-```bash
-cd backend
-docker-compose up --build -d
-```
-Cela va démarrer **PostgreSQL** et le **serveur FastAPI**.
+### Étapes
 
-Testez l'API en ouvrant : [http://localhost:8000/docs](http://localhost:8000/docs)
+1. **Cloner le projet**
+   ```bash
+   git clone https://github.com/Mahokii/PSID_Autopredict.git
+   cd PSID_Autopredict
+   ```
 
-### **3️⃣ Lancer le frontend React**
-```bash
-cd ../frontend
-npm install  # Installer les dépendances
-npm start    # Lancer le serveur React
-```
-Accédez à : [http://localhost:3000](http://localhost:3000)
+2. **Configurer les variables d'environnement**
+   Créez un fichier `.env` à la racine du projet avec le contenu suivant :
+   ```
+   MONGO_USER=admin
+   MONGO_PASSWORD=admin
+   ```
 
----
+3. **Lancer les conteneurs Docker**
+   ```bash
+   docker compose up --build
+   ```
 
-## 📌 Fonctionnalités
-- 🖥️ **Backend FastAPI** : API rapide et scalable
-- 🗄️ **Base de données PostgreSQL (JSONB)** : Stockage NoSQL
-- 🎨 **Frontend React + Bootstrap** : Interface moderne et responsive
-- 📡 **API REST** : Communication entre frontend et backend
-- 📊 **Dashboard interactif** : Visualisation des données
+   Cela démarre :
+   - MongoDB (port `27017`)
+   - Mongo Express (port `8081`)
+   - Backend FastAPI (port `8000`)
+   - Frontend React (port `3000`)
 
----
-
-## 📅 Prochaines améliorations
-✅ Création de composants réutilisables (Navbar, Table...)  
-✅ Connexion du frontend au backend  
-🔜 Intégration d'un modèle de Machine Learning  
-🔜 Ajout de graphiques et statistiques avancées  
+4. **Accéder aux services**
+   - **API FastAPI** : [http://localhost:8000/docs](http://localhost:8000/docs)
+   - **Mongo Express** : [http://localhost:8081](http://localhost:8081)
+   - **Frontend** : [http://localhost:3000](http://localhost:3000)
 
 ---
 
-## 🛠 Technologies utilisées
-- **Base de données** : PostgreSQL (avec JSONB pour NoSQL)
-- **Backend** : FastAPI, Uvicorn, SQLAlchemy, Asyncpg
-- **Frontend** : ReactJS, MUI, Bootstrap, Axios, React Router
-- **Déploiement** : Docker, Docker Compose
-- **Versionning** : Git
-- **CI/CD** : GitHub Action
-- **Hébergement en ligne** : GitHub
+## 🧪 Tests
 
+### Backend
+- Les tests unitaires pour le backend peuvent être exécutés avec `pytest` :
+  ```bash
+  pytest
+  ```
 
----
-
-## 📢 Contribuer
-1. **Forker** le projet
-2. **Créer une branche** : `git checkout -b feature-ma-fonctionnalité`
-3. **Commit tes changements** : `git commit -m "Ajout d'une nouvelle fonctionnalité"`
-4. **Pousser la branche** : `git push origin feature-ma-fonctionnalité`
-5. **Ouvrir une Pull Request** sur GitHub
+### Frontend
+- Les tests pour le frontend utilisent `jest` et `@testing-library/react` :
+  ```bash
+  npm test
+  ```
 
 ---
 
-## 📜 Licence
-Ce projet est sous licence **MIT**. N'hésitez pas à le réutiliser et l'améliorer !
+## 📊 Fonctionnement du modèle
 
+1. **Nettoyage des données** :
+   - Suppression des doublons.
+   - Transformation des colonnes catégoriques en variables numériques.
+
+2. **Entraînement** :
+   - Modèle : `RandomForestRegressor` de `scikit-learn`.
+   - Sauvegarde du modèle dans `models/random_forest_model.joblib`.
+
+3. **Prédiction** :
+   - L'API FastAPI expose une route `/predict` pour effectuer des prédictions à partir de nouvelles données.
+
+---
+
+## 📝 Licence
+
+Ce projet est sous licence Apache 2.0. Voir le fichier [LICENSE](LICENSE) pour plus d'informations.
+
+---
+
+## 📧 Contact
+
+Pour toute question ou suggestion, contactez-nous à **42000404@parisnanterre.fr**.

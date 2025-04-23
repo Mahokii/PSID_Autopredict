@@ -1,6 +1,11 @@
+import os
+from dotenv import load_dotenv
 import pandas as pd
 from pymongo import MongoClient
 import unicodedata
+
+# Charger les variables d'environnement depuis le fichier .env
+load_dotenv()
 
 def remove_accents(text):
     if isinstance(text, str):
@@ -74,7 +79,10 @@ print("✅ Données nettoyées prêtes à l'insertion :", len(df), "lignes.")
 print("🧾 Colonnes finales :", df.columns.tolist())
 
 # Insertion MongoDB
-client = MongoClient("mongodb://admin:admin@mongodb:27017/?authSource=admin")
+# Récupération des identifiants depuis les variables d'environnement
+mongo_user = os.getenv("MONGO_USER", "admin")
+mongo_password = os.getenv("MONGO_PASSWORD", "admin")
+client = MongoClient(f"mongodb://{mongo_user}:{mongo_password}@mongodb:27017/")
 db = client["voitureDB"]
 collection = db["voitures"]
 collection.drop()
