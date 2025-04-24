@@ -52,6 +52,28 @@ AutoPredict est une plateforme web intelligente permettant d’exploiter une bas
 
 Ces fonctionnalités sont rendues possibles grâce à une architecture combinant analyse de données, machine learning, backend intelligent et une interface frontend intuitive.
 
+\section{Public cible}
+
+Notre projet AutoPredict s’adresse à deux types d’utilisateurs principaux, chacun ayant des besoins distincts que nous avons pris en compte dans la conception de notre moteur de recommandation et dans la structuration de notre analyse.
+
+\subsubsection{Vendeurs de véhicules particuliers}
+
+Les vendeurs, qu’il s’agisse de particuliers ou de petites structures de revente, cherchent à positionner correctement leurs modèles sur le marché. AutoPredict les aide à :
+\begin{itemize}
+    \item fixer un prix de vente cohérent et compétitif en fonction des caractéristiques techniques du véhicule (année, style, puissance, segment de marché) 
+    \item anticiper la valeur de revente selon la dépréciation attendue, pour optimiser leurs marges 
+    \item identifier les catégories ou styles de véhicules les plus demandés selon les tendances observées
+\end{itemize}
+
+\subsubsection{Acheteurs de véhicules d’occasion ou neufs}
+
+Les acheteurs utilisent AutoPredict comme outil d’aide à la décision pour affiner leur recherche selon leurs préférences et contraintes personnelles. Notre outil leur permet :
+\begin{itemize}
+    \item de filtrer les véhicules selon des critères personnalisés (budget, consommation, motorisation, marque, popularité) 
+    \item de découvrir des modèles correspondant à leur profil d’usage (familial, urbain, plaisir, économique) 
+    \item d’évaluer si un modèle est bien positionné en termes de rapport qualité/prix, à partir des données du marché
+\end{itemize}
+Nous explorerons en détail les spécificités de chaque groupe cible, a travers nos personas
 
 \chapter{Caractéristiques Principales}
 \section{Interface Conviviale}
@@ -400,6 +422,11 @@ Pour les modèles KNN et RNN, nous avons opté pour le \textit{target encoding} 
 \subsubsection{Label Encoding}
 
 Pour le modèle Random Forest (RF), nous avons utilisé le \textit{label encoding}, qui s'est révélé être le plus performant. Cette technique assigne une valeur numérique unique à chaque catégorie, ce qui est bien adapté aux arbres de décision qui composent la forêt aléatoire.
+
+\subsection{Séparation des données et évaluation} 
+
+Afin d’évaluer la performance de notre modèle sans le biaiser, nous avons choisi de diviser notre jeu de données en deux sous-ensembles : un ensemble d’entraînement et un ensemble de test. La proportion utilisée pour le test, définie par la variable \texttt{test\_size}, a été fixée à 30~\% des données. Cette séparation permet de mesurer la capacité du modèle à généraliser sur des données inédites, et ainsi de limiter le risque de surapprentissage (overfitting).
+
 
 \subsection{Évaluation et Résultats}
 
