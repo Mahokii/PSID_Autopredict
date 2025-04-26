@@ -1,6 +1,6 @@
 # PSID Autopredict
 
-**PSID Autopredict** est une application full-stack conteneurisée permettant de prédire les prix des véhicules à partir de données. Ce projet combine un backend d’API, un frontend interactif, un modèle de Machine Learning et une base de données MongoDB.
+**PSID Autopredict** est une application permettant de prédire les prix des véhicules à partir de données. Ce projet combine un backend d’API, un frontend interactif, un modèle de Machine Learning et une base de données MongoDB.
 
 ---
 

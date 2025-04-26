@@ -4,7 +4,7 @@ import pandas as pd
 import joblib
 from pymongo import MongoClient
 from pathlib import Path
-from sklearn.model_selection import train_test_split, cross_val_score, cross_val_predict
+from sklearn.model_selection import train_test_split, cross_val_score, cross_val_predict, KFold
 from sklearn.metrics import mean_squared_error, r2_score
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.preprocessing import LabelEncoder
@@ -27,10 +27,10 @@ df = pd.DataFrame(list(collection.find()))
 # Suppression de l'_id Mongo
 df.drop(columns=["_id"], inplace=True)
 
-# Suppression des outliers sur la colonne price (quantile à 0.85)
+# Suppression des outliers sur la colonne price (quantile à 0.75)
 price_threshold = df["price"].quantile(0.75)
 df = df[df["price"] <= price_threshold]
-print(f"✅ Seuil appliqué (quantile 0.85) : {price_threshold:.2f}")
+print(f"✅ Seuil appliqué (quantile 0.75) : {price_threshold:.2f}")
 print(f"✅ Lignes restantes après filtrage : {len(df)}")
 
 # Réduction du dataframe aux colonnes conservées
@@ -81,16 +81,17 @@ print(f"Test R²: {test_r2:.4f}")
 print(f"Test RMSE: {test_rmse:.2f}")
 print(f"Test RMSE %: {(test_rmse / y_test.mean()) * 100:.2f}%")
 
-# --- 🔄 Cross-validation ---
-cv_scores = cross_val_score(model, X, y, cv=5, scoring="r2")
+# Cross-validation avec shuffle
+cv = KFold(n_splits=5, shuffle=True, random_state=42)
+cv_scores = cross_val_score(model, X, y, cv=cv, scoring="r2")
+cv_preds = cross_val_predict(model, X, y, cv=cv)
+
+cv_rmse = np.sqrt(mean_squared_error(y, cv_preds))
+cv_rmse_percent = (cv_rmse / y.mean()) * 100
+
 print("\n--- 🔄 Cross-validation ---")
 print(f"Scores R² : {np.round(cv_scores, 4)}")
 print(f"Moyenne R² : {np.mean(cv_scores):.4f}, écart-type : {np.std(cv_scores):.4f}")
-
-# ✅ Calcul du RMSE moyen en cross-validation
-cv_preds = cross_val_predict(model, X, y, cv=5)
-cv_rmse = np.sqrt(mean_squared_error(y, cv_preds))
-cv_rmse_percent = (cv_rmse / y.mean()) * 100
 print(f"Cross-val RMSE : {cv_rmse:.2f}")
 print(f"Cross-val RMSE % : {cv_rmse_percent:.2f}%")
 
