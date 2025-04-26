@@ -52,6 +52,81 @@ AutoPredict est une plateforme web intelligente permettant d’exploiter une bas
 
 Ces fonctionnalités sont rendues possibles grâce à une architecture combinant analyse de données, machine learning, backend intelligent et une interface frontend intuitive.
 
+\section{Public cible}
+
+Notre projet AutoPredict s’adresse à deux types d’utilisateurs principaux, chacun ayant des besoins distincts que nous avons pris en compte dans la conception de notre moteur de recommandation et dans la structuration de notre analyse.
+
+\subsubsection{Vendeurs de véhicules particuliers}
+
+Les vendeurs, qu’il s’agisse de particuliers ou de petites structures de revente, cherchent à positionner correctement leurs modèles sur le marché. AutoPredict les aide à :
+\begin{itemize}
+    \item fixer un prix de vente cohérent et compétitif en fonction des caractéristiques techniques du véhicule (année, style, puissance, segment de marché) 
+    \item anticiper la valeur de revente selon la dépréciation attendue, pour optimiser leurs marges 
+    \item identifier les catégories ou styles de véhicules les plus demandés selon les tendances observées
+\end{itemize}
+
+\subsubsection{Acheteurs de véhicules d’occasion ou neufs}
+
+Les acheteurs utilisent AutoPredict comme outil d’aide à la décision pour affiner leur recherche selon leurs préférences et contraintes personnelles. Notre outil leur permet :
+\begin{itemize}
+    \item de filtrer les véhicules selon des critères personnalisés (budget, consommation, motorisation, marque, popularité) 
+    \item de découvrir des modèles correspondant à leur profil d’usage (familial, urbain, plaisir, économique) 
+    \item d’évaluer si un modèle est bien positionné en termes de rapport qualité/prix, à partir des données du marché
+\end{itemize}
+Nous explorerons en détail les spécificités de chaque groupe cible, à travers nos personas.
+
+\section{Personas utilisateurs}
+
+Afin de mieux illustrer les usages concrets de notre plateforme AutoPredict, nous avons défini deux \textit{personas} représentant les profils types de nos utilisateurs cibles : un vendeur de véhicule et un acheteur. Ces profils permettent de centrer notre réflexion sur leurs attentes spécifiques et d’adapter les fonctionnalités de notre outil à leurs besoins.
+
+\subsubsection{Persona 1 : Julien, vendeur de voitures d’occasion}
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.5\textwidth]{Julien.jpg}
+\end{figure}
+
+\begin{itemize}
+    \item \textbf{Âge} : 42 ans
+    \item \textbf{Profession} : Garagiste indépendant
+    \item \textbf{Localisation} : Angers
+    \item \textbf{Objectif} : Vendre ses véhicules au bon prix en s’alignant sur les tendances du marché
+    \item \textbf{Comportement} :
+    \begin{itemize}
+        \item Dispose d’un stock varié de véhicules d’occasion
+        \item Cherche à évaluer la valeur de chaque voiture en fonction de ses caractéristiques (année, style, puissance, consommation...)
+    \end{itemize}
+    \item \textbf{Besoins couverts par AutoPredict} :
+    \begin{itemize}
+        \item Obtenir une estimation juste du prix de vente d’un modèle spécifique
+        \item Identifier les caractéristiques qui influencent le plus la valeur résiduelle d’un véhicule
+        \item Visualiser les tendances de consommation, de prix ou de popularité par segment de marché
+    \end{itemize}
+\end{itemize}
+
+\subsubsection{Persona 2 : Clara, acheteuse de voiture citadine}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.3\textwidth]{clara.jpg}
+\end{figure}
+
+\begin{itemize}
+    \item \textbf{Âge} : 29 ans
+    \item \textbf{Profession} : Infirmière
+    \item \textbf{Localisation} : Montpellier
+    \item \textbf{Objectif} : Trouver un véhicule fiable, économe et adapté à un usage urbain
+    \item \textbf{Comportement} :
+    \begin{itemize}
+        \item Recherche un véhicule d’occasion dans un budget de 12 000 à 15 000 euros
+        \item Privilégie la consommation, la taille et le confort plutôt que la puissance
+        \item Hésite entre plusieurs modèles et souhaite comparer les options selon ses critères
+    \end{itemize}
+    \item \textbf{Besoins couverts par AutoPredict} :
+    \begin{itemize}
+        \item Accéder à une sélection de modèles filtrés selon ses préférences
+        \item Comprendre la variation des prix en fonction des caractéristiques sélectionnées
+    \end{itemize}
+\end{itemize}
 
 \chapter{Caractéristiques Principales}
 \section{Interface Conviviale}
@@ -400,6 +475,11 @@ Pour les modèles KNN et RNN, nous avons opté pour le \textit{target encoding} 
 \subsubsection{Label Encoding}
 
 Pour le modèle Random Forest (RF), nous avons utilisé le \textit{label encoding}, qui s'est révélé être le plus performant. Cette technique assigne une valeur numérique unique à chaque catégorie, ce qui est bien adapté aux arbres de décision qui composent la forêt aléatoire.
+
+\subsection{Séparation des données et évaluation} 
+
+Afin d’évaluer la performance de notre modèle sans le biaiser, nous avons choisi de diviser notre jeu de données en deux sous-ensembles : un ensemble d’entraînement et un ensemble de test. La proportion utilisée pour le test, définie par la variable \texttt{test\_size}, a été fixée à 30~\% des données. Cette séparation permet de mesurer la capacité du modèle à généraliser sur des données inédites, et ainsi de limiter le risque de surapprentissage (overfitting).
+
 
 \subsection{Évaluation et Résultats}
 
