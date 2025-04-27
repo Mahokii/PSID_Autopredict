@@ -615,36 +615,73 @@ Afin d’évaluer la performance de notre modèle sans le biaiser, nous avons ch
 
 \subsection{Évaluation et Résultats}
 
+
+Pour évaluer les performances des modèles développés, deux éléments sont présentés : une courbe d'apprentissage et un tableau comparatif des principales métriques.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{learning_curve_random_forest.png}
+    \caption{Courbe d'apprentissage du modèle Random Forest}
+\end{figure}
+
+La courbe d'apprentissage (Figure \thefigure) montre que le modèle Random Forest atteint un score $R^2$ très élevé (proche de 0.95) pour l'ensemble de test, avec une faible divergence entre le score d'entraînement et celui de validation. Cela indique une capacité de généralisation correcte, avec peu d'overfitting.
+
 \subsubsection{Validation croisée}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{metrics_comparison_final.png}
+    \caption{Comparaison des performances des modèles KNN, Random Forest et RNN}
+\end{figure}
+
 
 Nous avons utilisé la méthode de validation croisée K-Fold pour évaluer les performances des modèles. Cette approche permet de garantir une évaluation robuste en divisant les données en plusieurs sous-ensembles et en entraînant le modèle sur différentes combinaisons de ces sous-ensembles. Nous avons effectué une validation croisée avec 5 folds à chaque fois. Aucun des modèles n'a montré de disparité significative dans les résultats, ce qui indique qu'il n'y a pas d'overfitting. Cela aide à prévenir le surapprentissage et à assurer que le modèle ne
 se contente pas de mémoriser les données d'entraînement, mais apprend plutôt à identifier
 et à généraliser à partir de patterns sous-jacents.
 
+\subsubsection{Comparaison des modèles}
+
+La validation croisée réalisée sur les différents modèles de régression permet de comparer leurs performances sur la base de plusieurs indicateurs : la racine carrée de l'erreur quadratique moyenne (RMSE), le RMSE en pourcentage de la moyenne des prix, le coefficient de détermination ($R^2$) et l'écart-type du $R^2$ obtenu sur les folds.
 
 \subsubsection{K-Nearest Neighbors (KNN)}
 
 \begin{itemize}
-    \item \textbf{Erreur quadratique moyenne (RMSE)} : \$3575.05
-    \item \textbf{Erreur quadratique moyenne (RMSE) en pourcentage} : 12.28\%
-    \item \textbf{Score \( R^2 \)} : 0.9463
+    \item \textbf{Erreur quadratique moyenne (RMSE)} : \$4932.62
+    \item \textbf{Erreur quadratique moyenne (RMSE) en pourcentage} : 20.42\%
+    \item \textbf{Score \( R^2 \)} : 0.829765
+    \item \textbf{Écart-type \( R^2 \)} : 0.018002
 \end{itemize}
 
 \subsubsection{Random Forest (RF)}
 
 \begin{itemize}
-    \item \textbf{Erreur quadratique moyenne (RMSE)} : \$3237.02
-    \item \textbf{Erreur quadratique moyenne (RMSE) en pourcentage} : 11.12\%
-    \item \textbf{Score \( R^2 \)} : 0.9560
+    \item \textbf{Erreur quadratique moyenne (RMSE)} : \$2575.02
+    \item \textbf{Erreur quadratique moyenne (RMSE) en pourcentage} : 10.66\%
+    \item \textbf{Score \( R^2 \)} : 0.953334
+    \item \textbf{Écart-type \( R^2 \)} : 0.003527
 \end{itemize}
 
 \subsubsection{Réseau de Neurones (RNN)}
 
 \begin{itemize}
-    \item \textbf{Erreur quadratique moyenne (RMSE)} : \$4055.24
-    \item \textbf{Erreur quadratique moyenne (RMSE) en pourcentage} : 13.93\%
-    \item \textbf{Score \( R^2 \)} : 0.9310
+    \item \textbf{Erreur quadratique moyenne (RMSE)} : \$8165.15
+    \item \textbf{Erreur quadratique moyenne (RMSE) en pourcentage} : 31.83\%
+    \item \textbf{Score \( R^2 \)} : 0.531927
+    \item \textbf{Écart-type \( R^2 \)} : 0.004102
 \end{itemize}
+
+\subsubsection{Analyse comparative et choix du modèle}
+
+Le tableau comparatif (Figure 7.3) ainsi que les résultats ci-dessus permettent de constater que le modèle Random Forest surpasse nettement les autres modèles évalués :
+
+\begin{itemize}
+    \item Son RMSE est le plus faible (\$2575.02), traduisant une précision supérieure dans la prédiction des prix.
+    \item Son RMSE en pourcentage (10.66\%) est également le plus bas, renforçant l'idée d'une erreur relative très maîtrisée.
+    \item Son score \( R^2 \) élevé (0.953334) témoigne d'une excellente capacité explicative du modèle.
+    \item L'écart-type du \( R^2 \) est extrêmement faible (0.003527), signe d'une grande stabilité des performances au travers des folds de validation croisée.
+\end{itemize}
+
+À l'inverse, le modèle KNN présente un RMSE beaucoup plus élevé, tandis que le RNN, malgré une architecture plus complexe, n'atteint pas la qualité prédictive escomptée, avec un score \( R^2 \) de seulement 0.531927.
 
 \subsection{Modèle choisi}
 

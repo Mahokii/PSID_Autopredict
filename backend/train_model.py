@@ -224,12 +224,12 @@ metrics_table = pd.DataFrame({
 })
 
 print("\n=== Tableau final ===")
-print(metrics_table.round(3))
+print(metrics_table.round(6))
 
 # Sauvegarde du tableau
 fig, ax = plt.subplots(figsize=(10, 3))
 ax.axis('off')
-table = ax.table(cellText=metrics_table.round(2).values, colLabels=metrics_table.columns, loc='center')
+table = ax.table(cellText=metrics_table.round(6).values, colLabels=metrics_table.columns, loc='center')
 table.scale(1.2, 1.2)
 plt.tight_layout()
 plt.savefig('figures/metrics_comparison_final.png')
