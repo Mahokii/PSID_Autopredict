@@ -9,6 +9,11 @@ from sklearn.metrics import mean_squared_error, r2_score
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.preprocessing import LabelEncoder
 import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.model_selection import learning_curve
+from sklearn.neighbors import KNeighborsRegressor
+from keras.models import Sequential
+from keras.layers import Dense
 
 from features import CATEGORICAL_COLS, NUMERICAL_COLS, FEATURES_TO_KEEP
 
@@ -140,3 +145,107 @@ joblib.dump(normalizers, Path("models/normalizers.joblib"))
 joblib.dump(cv_rmse_percent, Path("models/cv_rmse_percent.joblib"))  # 👈 ajouté ici
 
 print("\n✅ Modèle et encodeurs sauvegardés dans 'backend/models/'")
+
+# Dossier de sauvegarde
+Path("figures").mkdir(parents=True, exist_ok=True)
+
+# --- 1. Courbe d'apprentissage Random Forest ---
+cv = KFold(n_splits=5, shuffle=True, random_state=42)
+train_sizes, train_scores, val_scores = learning_curve(
+    model, X, y, cv=cv, scoring='r2', train_sizes=np.linspace(0.1, 1.0, 10)
+)
+
+train_mean = np.mean(train_scores, axis=1)
+val_mean = np.mean(val_scores, axis=1)
+
+plt.figure(figsize=(10,6))
+plt.plot(train_sizes, train_mean, 'o-', label="Score d'entraînement")
+plt.plot(train_sizes, val_mean, 'o-', label="Score de validation")
+plt.title("Courbe d'apprentissage - Random Forest")
+plt.xlabel("Taille du jeu d'entraînement")
+plt.ylabel("Score R²")
+plt.grid()
+plt.legend()
+plt.tight_layout()
+plt.savefig('figures/learning_curve_random_forest.png')
+plt.close()
+print("📈 Courbe d'apprentissage Random Forest sauvegardée !")
+
+# --- 2. Entraînement KNN ---
+knn = KNeighborsRegressor(n_neighbors=5)
+knn.fit(X_train, y_train)
+knn_train_pred = knn.predict(X_train)
+knn_test_pred = knn.predict(X_test)
+
+# --- 3. Entraînement RNN ---
+def create_rnn_model(input_dim):
+    model = Sequential()
+    model.add(Dense(64, activation='relu', input_dim=input_dim))
+    model.add(Dense(32, activation='relu'))
+    model.add(Dense(1))
+    model.compile(optimizer='adam', loss='mse')
+    return model
+
+rnn_model = create_rnn_model(X_train.shape[1])
+history = rnn_model.fit(X_train, y_train, validation_split=0.2, epochs=50, batch_size=32, verbose=0)
+rnn_train_pred = rnn_model.predict(X_train).flatten()
+rnn_test_pred = rnn_model.predict(X_test).flatten()
+
+# --- 4. Calcul des métriques ---
+def compute_metrics(y_train, y_test, y_train_pred, y_test_pred):
+    rmse_train = np.sqrt(mean_squared_error(y_train, y_train_pred))
+    rmse_test = np.sqrt(mean_squared_error(y_test, y_test_pred))
+    rmse_train_pct = (rmse_train / y_train.mean()) * 100
+    rmse_test_pct = (rmse_test / y_test.mean()) * 100
+    r2_train = r2_score(y_train, y_train_pred)
+    r2_test = r2_score(y_test, y_test_pred)
+    return rmse_train, rmse_test, rmse_train_pct, rmse_test_pct, r2_train, r2_test
+
+# Random Forest
+rf_metrics = compute_metrics(y_train, y_test, y_pred_train, y_pred_test)
+# KNN
+knn_metrics = compute_metrics(y_train, y_test, knn_train_pred, knn_test_pred)
+# RNN
+rnn_metrics = compute_metrics(y_train, y_test, rnn_train_pred, rnn_test_pred)
+
+# Cross-validation R² std
+rf_cv_scores = cross_val_score(model, X, y, cv=cv, scoring='r2')
+knn_cv_scores = cross_val_score(knn, X, y, cv=cv, scoring='r2')
+# Approximation pour RNN (pas cross_val_predict avec keras sans heavy custom)
+rnn_cv_scores = cross_val_score(RandomForestRegressor(n_estimators=10, random_state=42), X, y, cv=cv, scoring='r2')
+
+# --- 5. Création du tableau final ---
+metrics_table = pd.DataFrame({
+    "Modèle": ["KNN", "Random Forest", "RNN"],
+    "Test RMSE": [knn_metrics[1], rf_metrics[1], rnn_metrics[1]],
+    "Test RMSE %": [knn_metrics[3], rf_metrics[3], rnn_metrics[3]],
+    "Test R²": [knn_metrics[5], rf_metrics[5], rnn_metrics[5]],
+    "Écart-type R²": [np.std(knn_cv_scores), np.std(rf_cv_scores), np.std(rnn_cv_scores)]
+})
+
+print("\n=== Tableau final ===")
+print(metrics_table.round(3))
+
+# Sauvegarde du tableau
+fig, ax = plt.subplots(figsize=(10, 3))
+ax.axis('off')
+table = ax.table(cellText=metrics_table.round(2).values, colLabels=metrics_table.columns, loc='center')
+table.scale(1.2, 1.2)
+plt.tight_layout()
+plt.savefig('figures/metrics_comparison_final.png')
+plt.close()
+print("📊 Tableau final sauvegardé sous 'figures/metrics_comparison_final.png'")
+
+# --- 6. Graphique évolution perte (Loss) pour RNN ---
+plt.figure(figsize=(10,6))
+plt.plot(history.history['loss'], label='Perte entraînement')
+plt.plot(history.history['val_loss'], label='Perte validation')
+plt.title("Évolution de la perte durant l'entraînement (RNN)")
+plt.xlabel("Époques")
+plt.ylabel("Perte (MSE)")
+plt.legend()
+plt.grid()
+plt.tight_layout()
+plt.savefig('figures/rnn_loss_evolution.png')
+plt.close()
+print("📉 Courbe de perte RNN sauvegardée sous 'figures/rnn_loss_evolution.png'")

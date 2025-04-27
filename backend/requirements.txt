@@ -11,3 +11,6 @@ numpy
 joblib
 requests
 python-dotenv
+matplotlib
+keras
+tensorflow
