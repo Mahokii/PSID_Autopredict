@@ -692,6 +692,8 @@ Pour les variables numériques, nous avons utilisé la moyenne des valeurs filtr
 
 \subsection{Tolérance aux erreurs de saisie}
 
+\subsection{Tolérance aux erreurs de saisie}
+
 Pour gérer les cas où l'utilisateur fait des erreurs typographiques, comme écrire "5 series" au lieu de "serie 5" ou omettre un "s", nous avons mis en place un mécanisme de correspondance approximative. Ce mécanisme fonctionne comme suit :
 
 \begin{enumerate}
@@ -702,7 +704,25 @@ Pour gérer les cas où l'utilisateur fait des erreurs typographiques, comme éc
     \item \textbf{Normalisation des valeurs numériques} : Les valeurs numériques sont normalisées en utilisant les valeurs minimales et maximales spécifiées dans les normalisateurs.
 \end{enumerate}
 
-Ce mécanisme permet de rendre le système plus tolérant aux erreurs de saisie, améliorant ainsi l'expérience utilisateur.
+\textbf{Inférence des données manquantes} :  
+En plus de la correction des erreurs de saisie, nous avons intégré un mécanisme d'inférence pour compléter automatiquement certaines informations manquantes (notamment le nombre de cylindres, le type de transmission (\textit{drive}), la taille du véhicule (\textit{size}) et le style de carrosserie (\textit{style})).
+
+Le processus d'inférence fonctionne comme suit :
+\begin{enumerate}
+    \item \textbf{Filtrage des données} : À partir des informations partiellement fournies par l'utilisateur (\textit{make}, \textit{year}, \textit{hp}, \textit{fuel\_type}, \textit{transmission}), nous filtrons la base de données interne pour trouver des véhicules similaires.
+    \item \textbf{Approximation sur les catégories} : Pour les champs textuels tels que la marque ou le type de carburant, nous utilisons également une correspondance approximative afin de maximiser les chances de trouver des correspondances pertinentes.
+    \item \textbf{Estimation des caractéristiques manquantes} : 
+    \begin{itemize}
+        \item Pour les variables numériques (par exemple, le nombre de cylindres), nous utilisons la moyenne des valeurs correspondantes trouvées dans la base de données (arrondie à l'entier le plus proche).
+        \item Pour les variables catégorielles (par exemple, le type de transmission, la taille ou le style), nous utilisons la valeur la plus fréquente (\textit{mode}) parmi les correspondances trouvées.
+    \end{itemize}
+    \item \textbf{Valeurs par défaut} : En l'absence de correspondance suffisante (par exemple, aucun véhicule trouvé après filtrage), nous affectons des valeurs par défaut prudentes : \(4\) cylindres, transmission \textit{unknown}, taille \textit{unknown} et style \textit{unknown}.
+\end{enumerate}
+
+\textbf{Justification du choix de l'inférence} :  
+L'objectif est de minimiser l'effort de saisie demandé à l'utilisateur en déduisant automatiquement des informations prévisibles à partir des données déjà fournies. Les variables comme \textit{cylinders}, \textit{drive}, \textit{size} et \textit{style} sont généralement directement associées à un véhicule et peuvent être prédictibles à partir de ses caractéristiques principales (marque, puissance, carburant, transmission, etc.).  
+En revanche, nous n'avons pas tenté d'inférer des informations comme le \textit{model}, car cette variable est beaucoup plus spécifique et créative : il n'est pas réaliste d'essayer d'inventer ou de prédire un nom de modèle automobile. Le modèle est une donnée d'identification précise qu'il est indispensable que l'utilisateur fournisse explicitement.  
+Afin d'appuyer cette approche, nous avons également réalisé un sondage auprès d'un panel d'utilisateurs pour identifier les variables qu'ils seraient prêts à renseigner en priorité. Ce sondage a confirmé que des éléments tels que la marque, l'année, la motorisation et la transmission sont perçus comme simples et naturels à renseigner, tandis que des variables plus techniques comme le nombre de cylindres, la taille du véhicule ou son style sont moins spontanément connues et devraient donc être inférées automatiquement pour améliorer l'expérience utilisateur.
 
 \subsection{Affichage des résultats}
 
