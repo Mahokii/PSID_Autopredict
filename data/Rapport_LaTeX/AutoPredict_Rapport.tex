@@ -426,6 +426,130 @@ La composante \textit{Machine Learning} du projet \textbf{AutoPredict} a pour ob
 
 Cette estimation s'adresse principalement à un utilisateur se plaçant dans la peau d’un vendeur souhaitant connaître la valeur de revente potentielle de son véhicule. L’intégration de cette composante permet ainsi de proposer un service à forte valeur ajoutée, en facilitant la prise de décision pour les particuliers ou les professionnels.
 Le code est disponible dans le notebooks \texttt{AutoPredict\_ML.ipynb}. 
+\newline
+\newline
+\subsection{Démarche générale du projet}
+Notre projet suit une démarche structurée en trois grandes phases, inspirée des bonnes pratiques en Machine Learning. Cette méthodologie nous a permis de passer de données brutes à la construction d'un moteur de recommandation intelligent.
+
+\begin{itemize}
+    \item \textbf{Pré-traitement des données} :
+    \begin{itemize}
+        \item \textit{Formalisation des objectifs} : définition claire des besoins utilisateurs.
+        \item \textit{Acquisition des données} : collecte et consolidation de données (prix, caractéristiques techniques, type de transmission, consommation, etc.).
+        \item \textit{Préparation des données} : nettoyage, standardisation, encodage des variables catégorielles, et normalisation des variables numériques.
+    \end{itemize}
+    
+    \item \textbf{Phase d'apprentissage} :
+    \begin{itemize}
+        \item \textit{Apprentissage supervisé} : application d'algorithmes de Machine Learning pour estimer les prix et recommander des modèles de véhicules adaptés.
+        \item \textit{Sélection des méthodes} : utilisation de techniques adaptées comme la Classification, les k-plus proches voisins (KNN) ou encore les réseaux de neuronnes (RNN).
+    \end{itemize}
+    
+    \item \textbf{Post-traitement et validation} :
+    \begin{itemize}
+        \item \textit{Évaluation et validation} : mesure de la qualité des prédictions à l'aide d'indicateurs.
+        \item \textit{Interprétation des résultats} : analyse fine pour tirer des conclusions concrètes sur les préférences et tendances de marché.
+    \end{itemize}
+\end{itemize}
+
+Cette démarche rigoureuse garantit la fiabilité, la pertinence et l'interprétabilité de notre solution AutoPredict, tout en restant alignée avec les attentes pratiques du domaine automobile.
+
+\subsection{Choix de l'approche d'apprentissage}
+
+Dans le cadre de notre projet, l'objectif est de réaliser des prédictions sur les caractéristiques et les prix des véhicules. Cette problématique nous oriente naturellement vers l'apprentissage supervisé, car nous disposons d'un ensemble de données étiquetées, c'est-à-dire que pour chaque véhicule, les informations réelles (prix, caractéristiques, etc.) sont connues.
+
+L'apprentissage supervisé est une branche du Machine Learning où un modèle est entraîné à partir d'exemples étiquetés afin de prédire une sortie pour de nouvelles données. Lorsque la variable cible est discrète (appartenance à une classe ou à une catégorie), on parle alors de classification.
+
+Dans notre cas, comme nous cherchons à recommander ou positionner des véhicules selon différentes catégories de critères (par exemple style, segment de marché), la tâche est assimilable à un problème de classification supervisée.
+
+Ainsi, notre démarche s'appuie sur :
+\begin{itemize}
+    \item l'utilisation de données historiques étiquetées,
+    \item la mise en œuvre d'algorithmes de classification pour associer de nouveaux véhicules à la bonne catégorie ou prédire des préférences d'achat.
+\end{itemize}
+
+\subsection{Présentation des modèles utilisés}
+
+Dans le cadre de notre projet de prédiction automobile, nous avons choisi d'expérimenter trois types de modèles complémentaires, chacun ayant des avantages spécifiques en fonction de la nature des données et des objectifs visés. Voici une brève présentation de chacun :
+
+\subsubsection{Random Forest}
+
+La \textbf{Random Forest} est un algorithme d'ensemble basé sur la combinaison de plusieurs arbres de décision. Chaque arbre est entraîné sur un sous-échantillon différent des données, et les prédictions finales sont obtenues par un vote majoritaire (pour la classification) ou une moyenne (pour la régression). Ce modèle est reconnu pour sa robustesse, sa capacité à réduire le surapprentissage (overfitting) par rapport à un arbre unique, et son efficacité sur des ensembles de données complexes et bruités.
+
+\subsubsection{K-Nearest Neighbors (KNN)}
+
+Le \textbf{K-Nearest Neighbors} est un algorithme simple mais puissant qui classe un nouvel échantillon en fonction des $k$ exemples les plus proches dans l'espace des caractéristiques. Lorsque le nombre de voisins $k$ est faible, le modèle peut être extrêmement précis, car il s'adapte très finement aux données locales. Cependant, un $k$ trop petit risque de rendre le modèle très sensible au bruit et de provoquer un phénomène de surapprentissage (\textit{overfitting}). À l'inverse, un $k$ plus élevé rend le modèle plus généraliste, mais au prix d'une perte de précision locale.
+
+\subsubsection{Réseaux de Neurones (RNN)}
+
+Les \textbf{Réseaux de Neurones} constituent une approche inspirée du fonctionnement biologique du cerveau humain. Dans notre projet, nous explorons une architecture simple de réseau de neurones (de type dense) pour la prédiction. Les réseaux de neurones sont capables de modéliser des relations complexes entre les variables, en combinant plusieurs couches de traitement non linéaires. Bien que plus coûteux en temps de calcul et nécessitant davantage de données pour éviter l'overfitting, ils offrent une grande flexibilité et une capacité d'adaptation sur des problèmes de prédiction riches en interactions entre variables.
+
+
+
+\subsection{Indicateurs de performance utilisés}
+
+Afin d’évaluer la qualité des prédictions réalisées par nos modèles, nous avons utilisé deux métriques principales vuent en cours : le coefficient de détermination \( R^2 \) et la racine de l’erreur quadratique moyenne (RMSE).
+
+\subsubsection*{Coefficient de détermination (\( R^2 \))}
+
+Le \( R^2 \) mesure la proportion de la variance de la variable cible qui est expliquée par le modèle. 
+\begin{itemize}
+    \item \( R^2 = 1 \) : le modèle explique parfaitement les données.
+    \item \( R^2 = 0 \) : le modèle n'explique pas mieux que la moyenne.
+    \item \( R^2 < 0 \) : le modèle est pire qu'une simple moyenne.
+\end{itemize}
+
+Un \( R^2 \) élevé indique donc que le modèle ajuste correctement les données.
+
+\subsubsection*{Racine de l'erreur quadratique moyenne (RMSE)}
+
+La RMSE évalue l'écart moyen entre les valeurs prédites et les valeurs observées. 
+\begin{itemize}
+    \item Une RMSE faible indique que les prédictions du modèle sont proches des valeurs observées.
+    \item Contrairement à \( R^2 \), la RMSE est exprimée dans la même unité que la variable prédite (ici le prix en dollars).
+\end{itemize}
+
+La combinaison de \( R^2 \) et de la RMSE nous permet d’obtenir une vision complète de la performance : précision globale et écart moyen en valeur absolue.
+
+\subsection{Surapprentissage et sous-apprentissage}
+
+Dans notre projet AutoPredict, afin de mesurer la qualité de nos modèles, nous nous appuyons principalement sur deux indicateurs : le RMSE (Root Mean Squared Error) et le R\textsuperscript{2} (coefficient de détermination). Ces deux métriques nous permettent également de détecter deux phénomènes courants en machine learning : le surapprentissage (overfitting) et le sous-apprentissage (underfitting).
+
+\subsubsection{Overfitting (Surapprentissage)}
+
+Le \textbf{surapprentissage} survient lorsque le modèle est trop spécialisé sur les données d'entraînement. Il présente alors un \textbf{RMSE très faible} et un \textbf{R\textsuperscript{2} élevé} sur l'ensemble d'entraînement, mais ses performances chutent fortement sur l'ensemble de test. 
+
+Dans notre contexte, nous considérons qu'il y a overfitting si :
+\begin{itemize}
+    \item La différence de RMSE entre l'entraînement et le test dépasse \textbf{15\%}.
+    \item Le R\textsuperscript{2} sur le test est inférieur de plus de \textbf{0.1} par rapport à celui obtenu sur l'entraînement.
+\end{itemize}
+
+Cela signifie que le modèle a "mémorisé" les données au lieu d'apprendre à généraliser.
+
+\subsubsection{Underfitting (Sous-apprentissage)}
+
+Le \textbf{sous-apprentissage} se produit lorsque le modèle est incapable de capturer la structure des données, que ce soit sur l'entraînement ou sur le test. Cela se traduit par un \textbf{RMSE élevé} sur les deux jeux de données et un \textbf{R\textsuperscript{2} faible}.
+
+Nous détectons un underfitting si :
+\begin{itemize}
+    \item Le RMSE est élevé et proche entre l'entraînement et le test.
+    \item Le R\textsuperscript{2} reste inférieur à \textbf{0.6} sur les deux ensembles.
+\end{itemize}
+
+Cela indique que notre modèle est trop simple pour le problème posé.
+
+\subsubsection{Objectif d'équilibre}
+
+Un bon modèle doit trouver un \textbf{équilibre} :
+\begin{itemize}
+    \item Un \textbf{RMSE bas} et similaire entre l'entraînement et le test.
+    \item Un \textbf{R\textsuperscript{2} élevé} (idéalement supérieur à 0.7), avec peu d'écart entre les deux ensembles.
+\end{itemize}
+
+C'est en surveillant en parallèle RMSE et R\textsuperscript{2} que nous pouvons ajuster correctement nos hyperparamètres pour éviter ces deux dérives et garantir un modèle à la fois précis et généralisable.
+
+
 
 \section{Préparation des Données}
 
@@ -557,8 +681,6 @@ Nous avons mis en place un système d'inférence pour estimer les valeurs des va
 
 Pour les variables numériques, nous avons utilisé la moyenne des valeurs filtrées. Pour les variables catégorielles, nous avons retenu la catégorie la plus représentée après application des filtres. Si aucun élément n'est retourné par les filtres, la variable sera encodée avec la valeur \(-1\).
 
-
-\subsection{Tolérance à la panne}
 
 \subsection{Tolérance aux erreurs de saisie}
 
