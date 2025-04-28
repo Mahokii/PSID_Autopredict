@@ -81,7 +81,7 @@ const ModelMLPage = () => {
             {prediction ? (
               <Box textAlign="center">
                 <Typography variant="h2" color="primary">
-                  Prix estimé: {prediction.predicted_price} €
+                  Prix estimé: {prediction.predicted_price} $
                 </Typography>
                 <Typography variant="h5" color="textSecondary">
                   Erreur (RMSE%): {prediction.cv_rmse_percent}%

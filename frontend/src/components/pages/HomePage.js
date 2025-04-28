@@ -54,7 +54,7 @@ const HomePage = () => {
             </Typography>
             <Typography variant="body1">
               Nous avons développé une application web complète intégrant des visualisations en React avec Plotly, 
-              une analyse approfondie dans un notebook Jupyter, et un modèle de régression pour prédire les prix. 
+              une analyse approfondie dans un notebook Jupyter, et un modèle pour prédire les prix. 
               Ce travail permet d’identifier les modèles pertinents et de comprendre les critères qui influencent 
               réellement la valeur d’un véhicule.
             </Typography>
